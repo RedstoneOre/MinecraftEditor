@@ -15,9 +15,13 @@ git clone https://github.com/RedstoneOre/MinecraftEditor.git
 ```
 
 ## Operation
+
 Use w,a,s,d to move
+
 Use i,j,k,l to move digging focus
+
 Use \[ to dig
+
 Use ^C to Interrupt
 
 ## Progress
