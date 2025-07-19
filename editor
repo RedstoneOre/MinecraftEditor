@@ -1,0 +1,159 @@
+#! /bin/bash
+debug="${debug:-0}"
+end=0
+
+dirp="$(dirname "$0")"
+. "$dirp"/map.sh
+. "$dirp"/hardness.sh
+. "$dirp"/print.sh
+. "$dirp"/dig.sh
+. "$dirp"/entity.sh
+
+content="$(<"$1")"
+IFS=''
+# Special Chars
+#  PLY - Coder
+#  BOL - Begin of Line
+#  OOT - Out of Text(border)
+#  SOT - Start of Tab
+#  POT - Part of Tab
+#  EOT - End of Tab
+#  SCT - Single char Tab
+#  DIG - The char to be digged
+rdim=0
+for((i=0;;++i));do
+	read fc[$i] || break
+	fc["$rdim.$i.0"]='BOL'
+	for((j=1;;));do
+		read -N 1 tfc || break
+		tfcres=()
+		case "$tfc" in
+			$'\t') tfcres=( SOT POT POT POT POT POT POT EOT ) ;;
+			*) tfcres=( "$tfc" ) ;;
+		esac
+		for((k=0;k<"${#tfcres[@]}";++k));do
+			fc["$rdim.$i.$[j]"]="${tfcres[k]}"
+			j="$[j+1]"
+		done
+	done < <(echo -n "${fc[$i]}")
+	fc["$rdim.$i.c"]="$j"
+done < <(echo -n "$content";echo)
+lines[$rdim]="$i"
+
+[ "$debug" -ge 2 ] && {
+	for((i=0;i<lines;++i));do
+		for((j=0;j<${fc["$rdim.$i.c"]};++j));do
+			echo -n "${fc["$rdim.$i.$j"]}"'|'
+		done
+		echo
+	done
+	read
+}
+px=0 py=0 dim=0 vx=10 vy=5
+trap 'end=1' SIGINT
+ltty=`stty -g`
+stty -echo icanon
+echo -n $'\e[0m\e[?25l'
+clear
+
+function move {
+	tpx="$[$1+px]" tpy="$[$2+py]"
+	[ "${fc["$dim.$tpy.$tpx"]:-OOT}" != OOT ] && {
+		px="$tpx" py="$tpy"
+		return 0
+	}
+	return 1
+}
+
+CreateEntity $ENTITY_ITEM '5#BOL' 1 0 0
+
+power=100 prignore=0
+while true;do
+	[ "$end" == 1 ] && break
+	echo -n $'\e[0;0H'
+	for((i=py-vy;i<=py+vy;++i));do
+		for((j=px-vx;j<=px+vx;++j));do
+			prc=`getCharOnPos "$j" "$i"`
+			[ "$i" == "$diy" ] && [ "$j" == "$dix" ] && prc=DIG
+			[ "$i" == "$py" ] && [ "$j" == "$px" ] && prc=PLY
+			[ "${entopos["$dim.$j.$i.c"]:-0}" -gt 0 ] && {
+				hasentity='E'
+				true
+			} || hasentity='e'
+			SetScreenShow "$[i-py]" "$[j-px]" "$hasentity$prc" && {
+				PrintIgnore "$prignore"
+				prignore=0
+			       	PrintChar "$prc" "$hasentity"
+				true
+			} || {
+				prignore="$[prignore+1]"
+			}
+		done
+		PrintIgnore "$prignore"
+		prignore=0
+		echo $'\e[K'
+	done
+	echo -n 'Pos: ('"$px"', '"$py"'), DigPos: ('"$dix"', '"$diy"')'$'\e[K\n'
+	[ "$dip" -gt 0 ] && {
+		echo -n 'Mining char '"$(PrintChar `getCharOnPos "$dix" "$diy"`)"$'\e[0m at ('"$dix"', '"$diy"'), progress '"$dip"'/'"$(getHardness `getCharOnPos "$dix" "$diy"`)"$'\e[K\n'
+	}
+	echo -n 'Power: '"$power"$'\e[K\n'
+	prentsz="${entopos["$dim.$px.$py.c"]:-0}"
+	[ "$prentsz" -gt 0 ] && {
+		echo $'Entities: \e[K'
+		for((prenti=0;prenti<prentsz;++prenti));do
+			echo -n '  '
+			DiscribeEntity "${entopos["$dim.$px.$py.$prenti"]}"
+			echo $'\e[K'
+		done
+	}
+
+	echo -n $'\e[K\n\e[K\n\e[K\n'
+	opsuc=0
+	while [ "$opsuc" == 0 ] && [ "$end" != 1 ];do
+		isdig=0 ismove=0
+		[ "${fc["$dim.$[py+1].$px"]}" == ' ' ] && {
+			move 0 1
+			ismove=1
+		}
+		op=''
+		read -N 1 -t 0.5 op
+		read -N 2147483647 -t 0.03
+		case "$op" in
+			'') opsuc=1;;
+			w) [ `getCharOnPos "$px" "$[py-1]"` != BOL ] && {
+				move 0 -1; ismove=1
+				opsuc=1
+			};;
+			a) move -1 0; ismove=1;opsuc=1;;
+			s) move 0 1; ismove=1;opsuc=1;;
+			d) move 1 0; ismove=1;opsuc=1;;
+			i) movedig 0 -1;opsuc=1;;
+			j) movedig -1 0;opsuc=1;;
+			k) movedig 0 1;opsuc=1;;
+			l) movedig 1 0;opsuc=1;;
+			' ')
+				[ "$power" -ge 20 ] && {
+					[ `getCharOnPos "$px" "$[py-2]"` != BOL ] && move 0 -2
+					power="$[power-20]"
+					opsuc=1
+				}
+				;;
+			'[') dig "$dix" "$diy" && opsuc=1;isdig=1;;
+		esac
+	done
+	power="$[power+1]"
+	[ "$isdig" == 0 ] && {
+		dip="$[dip-3]"
+		[ "$dip" -lt 0 ] && dip=0
+		true
+	} || {
+		[ "$power" -gt 0 ] && power="$[power-1]"
+	}
+	[ "$ismove" == 1 ] && {
+		movedig "$px" "$py" s
+	}
+done
+
+stty "$ltty"
+echo -n $'\ec\e[0m\e[?25h'
