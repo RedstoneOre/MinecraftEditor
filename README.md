@@ -21,25 +21,26 @@ Use \[ to dig
 Use ^C to Interrupt
 
 ## Progress
-[ ] File Operations
-- [x] Basic file reading
-- [ ] Multiple file reading
-- - [x] Support
-- [ ] File Saving
-[ ] Arguments Reading
-- [ ] \(Almost Nothing Done\)
-[ ] Editing
-- [x] Map
-- [x] Moving
-- [x] Mining
-- [ ] Placing
-- [x] Entities
-- - [x] Support
-- - [x] Item Type
-- - [ ] Battary Type
-- - [x] Creating & Deleting
-- [ ] Inventory
-- - [x] Support
-- - [ ] Item Operating
-- - [ ] Pick
-- - [ ] Drop
+
+- [ ] File Operations
+- - [x] Basic file reading
+- - [ ] Multiple file reading
+- - - [x] Support
+- - [ ] File Saving
+- [ ] Arguments Reading
+- - [ ] \(Almost Nothing Done\)
+- [ ] Editing
+- - [x] Map
+- - [x] Moving
+- - [x] Mining
+- - [ ] Placing
+- - [x] Entities
+- - - [x] Support
+- - - [x] Item Type
+- - - [ ] Battary Type
+- - - [x] Creating & Deleting
+- - [ ] Inventory
+- - - [x] Support
+- - - [ ] Item Operating
+- - - [ ] Pick
+- - - [ ] Drop
