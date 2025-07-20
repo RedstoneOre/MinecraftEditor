@@ -3,6 +3,7 @@ debug="${debug:-0}"
 end=0
 
 export dirp="$(dirname "$0")"
+mkdir -p "$dirp"/tmp
 . "$dirp"/input.sh # use fd 12
 . "$dirp"/map.sh
 . "$dirp"/hardness.sh
