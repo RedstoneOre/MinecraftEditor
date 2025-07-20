@@ -1,21 +1,50 @@
 #! /bin/bash
+declare -A CharStyle CharPrc
+CharStyle['PLY']='4'
+CharPrc['PLY']='@'
+CharStyle['BOL']='2'
+CharPrc['BOL']='|'
+CharStyle['OOT']='3'
+CharPrc['OOT']='#'
+CharStyle['SOT']='2'
+CharPrc['SOT']='['
+CharStyle['POT']='2'
+CharPrc['POT']='.'
+CharStyle['EOT']='2'
+CharPrc['EOT']=']'
+CharStyle['DIG']='4'
+CharPrc['DIG']='#'
+CharStyle['ESP']='2'
+CharPrc['ESP']='^'
+CharStyle['NDC']='9'
+CharPrc['NDC']=''
+CharStyle['default']='9'
+
+# PrintChar <Code> <Tags> <LastCharStyle>
+#  set PrintCharStyle as the char's style
 function PrintChar {
-	printentity=0 exreset=1
+	charbg='-'
 	[[ "$2" =~ E ]] && {
-		printentity=1
+		charbg=7
 	}
-	[ "$printentity" == 1 ] && echo -n $'\e[107m'
-	case "$1" in
-		PLY) echo -n $'\e[34m@\e[0m';exreset=0 ;;
-		BOL) echo -n $'\e[32m|\e[0m';exreset=0 ;;
-		OOT) echo -n $'\e[33m#\e[0m';exreset=0 ;;
-		SOT) echo -n $'\e[32m>';exreset=0 ;;
-		POT) echo -n '.';exreset=0 ;;
-		EOT) echo -n $'.\e[0m';exreset=0 ;;
-		DIG) echo -n $'\e[34m#\e[0m';exreset=0 ;;
-		*) [ "$printentity" == 1 ] && echo -n $'\e[30m'; echo -n "$1" ;;
-	esac
-	[ "$printentity" == 1 ] && [ "$exreset" == 1 ] && echo -n $'\e[0m'
+	charstyle="${CharStyle[$1]:-${CharStyle[default]}}"
+	[ "$charstyle.$charbg" == '9.7' ] && charstyle=0
+	PrintCharStyle="$charstyle.$charbg"
+	stylestr='' stylereset=0
+	[ "${3//*./}" != "$charbg" ] && {
+		stylestr="$stylestr""$(
+				[ "$charbg" == '-' ] && {
+					echo -n '0;'
+					stylerreset=1
+					true
+				} || echo -n '10'"$charbg"';'
+			)"
+	}
+	{ [ "$stylerreset" == 1 ] || [ "${3//.*/}" != "$charstyle" ]; } && {
+		stylestr="${stylestr}3$charstyle"';'
+	}
+	[ "${#stylestr}" -gt 1 ] && echo -n $'\e['"${stylestr:0:-1}m"
+	echo -n "${CharPrc["$1"]-"$1"}"
 }
 function PrintIgnore {
 	case "$1" in

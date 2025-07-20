@@ -7,7 +7,7 @@ rm "$inputtmpfifo"
 function InputThread {
 	while read inputop <&12;do
 		[ "$inputop" == end ] && break
-		read -N 1 -t 0.5 op
+		read -N 1 op
 		case "$op" in
 			w) echo 'Operate_MoveUpwards' ;;
 			a) echo 'Operate_MoveLeft' ;;

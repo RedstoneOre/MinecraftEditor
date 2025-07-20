@@ -16,9 +16,10 @@ function Operate_MoveRight {
 }
 function Operate_Jump {
 	[ "$power" -ge 20 ] && {
-		[ `getCharOnPos "$px" "$[py-2]"` != BOL ] && move 0 -2
+		[ `getCharOnPos "$px" "$[py-1]"` != BOL ] && move 0 -1
+		canceldrop="$[canceldrop+1]"
 		power="$[power-20]"
-		opsuc=1
+		opsuc=1 ismove=1
 	}
 }
 
