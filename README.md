@@ -11,6 +11,7 @@ git clone https://github.com/RedstoneOre/MinecraftEditor.git
 
 ## Usage
 ```sh
+cd MinecraftEditor
 ./editor <file>
 ```
 
@@ -31,6 +32,8 @@ Use ^C to Interrupt
 - - [ ] Multiple file reading
 - - - [x] Support
 - - [ ] File Saving
+- - [ ] Save Reading
+- - [ ] Save Saving
 - [ ] Arguments Reading
 - - [ ] \(Almost Nothing Done\)
 - [ ] Editing
@@ -43,8 +46,17 @@ Use ^C to Interrupt
 - - - [x] Item Type
 - - - [ ] Battary Type
 - - - [x] Creating & Deleting
+- - - [ ] Entity Moving
 - - [ ] Inventory
 - - - [x] Support
 - - - [ ] Item Operating
 - - - [ ] Pick
 - - - [ ] Drop
+- [ ] Optimize
+- - [ ] Multi-threading
+- - - [x] Input thread
+- - - [ ] Async Print
+- - - [ ] Entity thread
+- - [x] Free Headers Including
+- [ ] Modding
+- - [ ] \(Nothing Done\)
