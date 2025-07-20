@@ -2,7 +2,8 @@
 debug="${debug:-0}"
 end=0
 
-dirp="$(dirname "$0")"
+export dirp="$(dirname "$0")"
+. "$dirp"/input.sh # use fd 12
 . "$dirp"/map.sh
 . "$dirp"/hardness.sh
 . "$dirp"/print.sh
@@ -67,8 +68,10 @@ function move {
 
 CreateEntity $ENTITY_ITEM '5#BOL' 1 0 0
 
-power=100 prignore=0
+power=100 prignore=0 isdig=0 opsuc=0
+. "$dirp"/operate.sh
 while true;do
+	echo >&12
 	[ "$end" == 1 ] && break
 	echo -n $'\e[0;0H'
 	for((i=py-vy;i<=py+vy;++i));do
@@ -117,30 +120,9 @@ while true;do
 			ismove=1
 		}
 		op=''
-		read -N 1 -t 0.5 op
-		read -N 2147483647 -t 0.03
-		case "$op" in
-			'') opsuc=1;;
-			w) [ `getCharOnPos "$px" "$[py-1]"` != BOL ] && {
-				move 0 -1; ismove=1
-				opsuc=1
-			};;
-			a) move -1 0; ismove=1;opsuc=1;;
-			s) move 0 1; ismove=1;opsuc=1;;
-			d) move 1 0; ismove=1;opsuc=1;;
-			i) movedig 0 -1;opsuc=1;;
-			j) movedig -1 0;opsuc=1;;
-			k) movedig 0 1;opsuc=1;;
-			l) movedig 1 0;opsuc=1;;
-			' ')
-				[ "$power" -ge 20 ] && {
-					[ `getCharOnPos "$px" "$[py-2]"` != BOL ] && move 0 -2
-					power="$[power-20]"
-					opsuc=1
-				}
-				;;
-			'[') dig "$dix" "$diy" && opsuc=1;isdig=1;;
-		esac
+		read op <&4
+		$op
+		[ "$opsuc" == 0 ] && echo >&12
 	done
 	power="$[power+1]"
 	[ "$isdig" == 0 ] && {
@@ -153,7 +135,8 @@ while true;do
 	[ "$ismove" == 1 ] && {
 		movedig "$px" "$py" s
 	}
-done
-
+done 4< <(InputThread)
+echo 'E' >&12
 stty "$ltty"
+wait
 echo -n $'\ec\e[0m\e[?25h'
