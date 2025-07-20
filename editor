@@ -14,7 +14,6 @@ unset MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness MCEDITOR_INC_pri
 . "$dirp"/entity.sh
 . "$dirp"/file.sh
 
-content="$(<"$1")"
 IFS=''
 # Special Chars
 #  PLY - Coder
@@ -25,10 +24,11 @@ IFS=''
 #  EOT - End of Tab
 #  SCT - Single char Tab
 #  DIG - The char to be digged
-#  ESP - Espace the following char
+#  ESP - Espace the following 1 char
+#  ELB - Brack espace left brack
+#  ERB - Brack espace right brack
 #  NDC - No displaying char, only for formattinng
-rdim=0
-Read_File 0 < <(echo -n "$content";echo)
+Read_File 0 < <(cat "$1";echo)
 
 [ "$debug" -ge 2 ] && {
 	for((i=0;i<lines;++i));do
