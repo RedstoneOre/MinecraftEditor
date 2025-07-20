@@ -67,7 +67,6 @@
 	braesp[$'c\235']='9d'
 	braesp[$'c\236']='9e'
 	braesp[$'c\237']='9f'
-	echo '^A: '"${ctrlesp[$'c\001']}"
 	# mcespace <Char>
 	#  set tfcres as the espaced char list
 	function mceespace {
