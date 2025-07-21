@@ -3,6 +3,7 @@
 [ -v MCEDITOR_INC_input ] || {
 	[ "$debug" -ge 1 ] && echo 'Input header loaded'
 	MCEDITOR_INC_input=
+	. "$dirp"/operate.sh
 	inputtmpfifo="$dirp"/tmp/$$.fifo
 	mkfifo "$inputtmpfifo"
 	exec 12<> "$inputtmpfifo"
@@ -21,7 +22,9 @@
 				k) echo 'Operate_MoveFocusDownwards' ;;
 				l) echo 'Operate_MoveFocusRight' ;;
 				' ') echo 'Operate_Jump' ;;
+				[1-9] ) echo 'Operate_SwitchHotbar '"$[op-1]";;
 				'[') echo 'Operate_Dig' ;;
+				']') echo 'Operate_Place' ;;
 				*) echo 'Operate_Nothing' ;;
 			esac
 			read -N 2147483647 -t 0.03

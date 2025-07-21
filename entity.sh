@@ -91,7 +91,7 @@
 			0)
 				echo -n 'Item '
 				ParseItemEntityData "${entdatas["$1"]}"
-				DescribeItem "$entityitemtype" '' "$entityitemcnt"
+				DescribeItem "$entityitemtype" "$entityitemcnt" '' ;;
 		esac
 	}
 }

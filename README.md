@@ -21,7 +21,9 @@ Use w,a,s,d to move
 
 Use i,j,k,l to move digging focus
 
-Use \[ to dig
+Use 1~9 to select slot in hotbar
+
+Use \[ to dig, \] to place
 
 Use ^C to Interrupt
 
@@ -40,7 +42,7 @@ Use ^C to Interrupt
 - - [x] Map
 - - [x] Moving
 - - [x] Mining
-- - [ ] Placing
+- - [x] Placing
 - - [x] Entities
 - - - [x] Support
 - - - [x] Item Type

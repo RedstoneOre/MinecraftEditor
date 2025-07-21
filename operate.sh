@@ -44,9 +44,21 @@
 	function Operate_Nothing {
 		opsuc=1
 	}
+	function Operate_SwitchHotbar {
+		lselhotbar="$selhotbar" selhotbar="$1"
+		opsuc=1
+	}
 	function Operate_Dig {
 		 [ `getCharOnPos "$focx" "$focy"` != ' ' ] && dig "$focx" "$focy" && {
 			opsuc=1;isdig=1
+		}
+	}
+	function Operate_Place {
+		[ "${invc["$selhotbar"]}" -ge 1 ] && {
+			place "$focx" "$focy" "${inv["$selhotbar"]}" && {
+				InvTake "$selhotbar" 1
+				opsuc=1 isdig=1
+			}
 		}
 	}
 }

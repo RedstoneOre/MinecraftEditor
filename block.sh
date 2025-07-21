@@ -18,7 +18,7 @@
 	}
 	# place <x> <y> <Char>
 	function place {
-		fc["$dim.$2.$1"]="$3"
+		[ "${fc["$dim.$2.$1"]}" == ' ' ] && fc["$dim.$2.$1"]="$3"
 	}
 	function movefocus {
 		tpx="$1" tpy="$2"

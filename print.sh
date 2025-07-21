@@ -2,6 +2,7 @@
 [ -v MCEDITOR_INC_print ] || {
 	[ "$debug" -ge 1 ] && echo 'Printing header loaded'
 	MCEDITOR_INC_print=
+	defaultstyle='9.-'
 	declare -A CharStyle CharPrc
 	CharStyle['PLY']='4'
 	CharPrc['PLY']='@'
@@ -23,6 +24,8 @@
 	CharPrc['ELB']='<'
 	CharStyle['ERB']='2'
 	CharPrc['ERB']='>'
+	CharStyle['VSP']='4'
+	CharPrc['VSP']='.'
 	CharStyle['NDC']='9'
 	CharPrc['NDC']=''
 	CharStyle['default']='9'

@@ -2,7 +2,7 @@
 [ -v MCEDITOR_INC_inventory ] || {
 	[ "$debug" -ge 1 ] && echo 'Inventory header loaded'
 	MCEDITOR_INC_inventory=
-	inv=() invc=() invsize=40
+	inv=() invc=() invsize=40 selhotbar=0 lselhotbar=-1
 	for((i=0;i<invsize;++i));do
 		inv[i]='' invc[i]=0
 	done
@@ -59,18 +59,28 @@
 		invc[$1]="${invc[$2]}" inv[$1]="${inv[$2]}"
 		invc[$2]="$invcswtmp" inv[$2]="$invswtmp"
 	}
-	# DescribeItem <Type> <Num>
+	# DescribeItem <Type> <Num> <Tags>
 	#  output the item describtion
 	function DescribeItem {
-		echo -n "$2 * $1"$'\e[0m'
+		[ "$2" -gt 1 ] && echo -n "$2 * "
+		dscItem="${1:-NDC}"
+		[ "$1" == ' ' ] && dscItem='VSP'
+		PrintChar "$dscItem" "$3" "$defaultstyle"
 	}
+	# ShowInventory 
 	function ShowInventory {
 		showinvwarp=5
 		echo -n $'Inventory:\e[K'
 		for((invi=0;invi<invsize;++invi));do
 			[ "$[invi%showinvwarp]" == 0 ] && echo -n $'\n\e[K'
-			[ "${invc[invi]}" -gt 1 ] && echo -n "${invc[invi]}*"
-			echo -n "${inv[invi]:-Nothing}"$'\t'
+			{ # Just DescribeItem but it's so slow to call the func
+				dscItem="${inv[invi]:-NDC}" dscCnt="${invc[invi]}"  dscTag=` [ "$selhotbar" == "$invi" ] && { echo -n E;true; } || echo -n e `
+				[ "$dscCnt" -gt 1 ] && echo -n "$dscCnt * "
+				[ "$dscItem" == ' ' ] && dscItem='VSP'
+				PrintChar "$dscItem" "$dscTag" "$defaultstyle"
+			}
+			[ "${inv[invi]}" == '' ] && echo -n 'Nothing'
+			echo -n $'\t\e[0m'
 		done
 	}
 }
