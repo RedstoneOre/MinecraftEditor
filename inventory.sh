@@ -66,7 +66,7 @@
 	}
 	function ShowInventory {
 		showinvwarp=5
-		echo -n 'Inventory:'
+		echo -n $'Inventory:\e[K'
 		for((invi=0;invi<invsize;++invi));do
 			[ "$[invi%showinvwarp]" == 0 ] && echo -n $'\n\e[K'
 			[ "${invc[invi]}" -gt 1 ] && echo -n "${invc[invi]}*"

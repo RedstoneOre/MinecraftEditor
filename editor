@@ -10,7 +10,7 @@ unset MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness MCEDITOR_INC_pri
 . "$dirp"/map.sh
 . "$dirp"/hardness.sh
 . "$dirp"/print.sh
-. "$dirp"/dig.sh
+. "$dirp"/block.sh
 . "$dirp"/entity.sh
 . "$dirp"/file.sh
 

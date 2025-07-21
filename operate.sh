@@ -3,8 +3,7 @@
 	[ "$debug" -ge 1 ] && echo 'Operations loaded'
 	MCEDITOR_INC_operate=
 	. "$dirp"/map.sh
-	. "$dirp"/dig.sh
-	. "$dirp"/place.sh
+	. "$dirp"/block.sh
 	function Operate_MoveUpwards {
 		[ `getCharOnPos "$px" "$[py-1]"` != BOL ] && {
 			move 0 -1; ismove=1
