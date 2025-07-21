@@ -4,6 +4,7 @@
 	MCEDITOR_INC_operate=
 	. "$dirp"/map.sh
 	. "$dirp"/dig.sh
+	. "$dirp"/place.sh
 	function Operate_MoveUpwards {
 		[ `getCharOnPos "$px" "$[py-1]"` != BOL ] && {
 			move 0 -1; ismove=1
@@ -29,23 +30,23 @@
 	}
 
 	function Operate_MoveFocusUpwards {
-		movedig 0 -1; opsuc=1
+		movefocus 0 -1; opsuc=1
 	}
 	function Operate_MoveFocusLeft {
-		movedig -1 0; opsuc=1
+		movefocus -1 0; opsuc=1
 	}
 	function Operate_MoveFocusDownwards {
-		movedig 0 1; opsuc=1
+		movefocus 0 1; opsuc=1
 	}
 	function Operate_MoveFocusRight {
-		movedig 1 0; opsuc=1
+		movefocus 1 0; opsuc=1
 	}
 
 	function Operate_Nothing {
 		opsuc=1
 	}
 	function Operate_Dig {
-		dig "$dix" "$diy" && {
+		 [ `getCharOnPos "$focx" "$focy"` != ' ' ] && dig "$focx" "$focy" && {
 			opsuc=1;isdig=1
 		}
 	}

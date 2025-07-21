@@ -58,19 +58,36 @@ function move {
 	return 1
 }
 
-CreateEntity $ENTITY_ITEM '5#BOL' 1 0 0
+CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
+CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 2` 1 1 0
+CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 1` 2 1 0
+CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 63` 2 2 0
 
 power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0
 . "$dirp"/operate.sh
 while true;do
 	echo >&12
 	[ "$end" == 1 ] && break
+	[ "${entopos["$dim.$px.$py.c"]:-0}" -gt 0 ] && {
+		apickcnt="${entopos["$dim.$px.$py.c"]}" apick=()
+		for((i=0;i<apickcnt;++i));do
+			apicktt="${entopos["$dim.$px.$py.$i"]}"
+			[ "${entities["$apicktt"]}" == $ENTITY_ITEM ] && {
+				apick[${#apick[@]}]="$apicktt"
+			}
+		done
+		for i in "${apick[@]}";do
+			ParseItemEntityData "${entdatas[$i]}"
+			InvPick "$entityitemtype" "$entityitemcnt"
+			DeleteEntity "$i"
+		done
+	}
 	echo -n $'\e[0;0H'
 	PrintCharStyle='9.-'
 	for((i=py-vy;i<=py+vy;++i));do
 		for((j=px-vx;j<=px+vx;++j));do
 			prc=`getCharOnPos "$j" "$i"`
-			[ "$i" == "$diy" ] && [ "$j" == "$dix" ] && prc=DIG
+			[ "$i" == "$focy" ] && [ "$j" == "$focx" ] && prc=DIG
 			[ "$i" == "$py" ] && [ "$j" == "$px" ] && prc=PLY
 			[ "${entopos["$dim.$j.$i.c"]:-0}" -gt 0 ] && {
 				hasentity='E'
@@ -90,9 +107,9 @@ while true;do
 		PrintChar NDC '' "$PrintCharStyle"
 		echo $'\e[K'
 	done
-	echo -n 'Pos: ('"$px"', '"$py"'), DigPos: ('"$dix"', '"$diy"')'$'\e[K\n'
+	echo -n 'Pos: ('"$px"', '"$py"'), DigPos: ('"$focx"', '"$focy"')'$'\e[K\n'
 	[ "$dip" -gt 0 ] && {
-		echo -n 'Mining char '"$(PrintChar `getCharOnPos "$dix" "$diy"`)"$'\e[0m at ('"$dix"', '"$diy"'), progress '"$dip"'/'"$(getHardness `getCharOnPos "$dix" "$diy"`)"$'\e[K\n'
+		echo -n 'Mining char '"$(PrintChar `getCharOnPos "$focx" "$focy"`)"$'\e[0m at ('"$focx"', '"$focy"'), progress '"$dip"'/'"$(getHardness `getCharOnPos "$focx" "$focy"`)"$'\e[K\n'
 	}
 	echo -n 'Power: '"$power"$'\e[K\n'
 	prentsz="${entopos["$dim.$px.$py.c"]:-0}"
@@ -104,6 +121,7 @@ while true;do
 			echo $'\e[K'
 		done
 	}
+	ShowInventory
 
 	echo -n $'\e[K\n\e[K\n\e[K\n'
 	[ "$canceldrop" -gt 0 ] && {
@@ -131,7 +149,7 @@ while true;do
 		[ "$power" -gt 0 ] && power="$[power-1]"
 	}
 	[ "$ismove" == 1 ] && {
-		movedig "$px" "$py" s
+		movefocus "$px" "$py" s
 	}
 done 4< <(InputThread)
 echo 'E' >&12

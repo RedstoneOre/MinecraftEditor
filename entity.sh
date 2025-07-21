@@ -2,6 +2,7 @@
 [ -v MCEDITOR_INC_entity ] || {
 	[ "$debug" -ge 1 ] && echo 'Entities header loaded'
 	MCEDITOR_INC_entity=
+	. "$dirp"/inventory.sh
 	entname=()
 	ENTITY_ITEM=0 entname[0]='Item'
 	ENTITY_BATTARY=1 entname[1]='Battary'
@@ -24,7 +25,7 @@
 	# DeleteEntity <ID>
 	#  Return if the entoty is exist, or won't delete any
 	function DeleteEntity {
-		[ "${entities[$1]}" == '' ] return 1
+		[ "${entities[$1]}" == '' ] && return 1
 		unset entities["$1"] entdatas["$1"]
 		{
 			read -r -d '#' dentpos
@@ -69,17 +70,28 @@
 			echo 'Pos '"$ShowAllEntityI"': '"${entopos[$ShowAllEntityI]}"
 		done
 	}
+	
+	# GetItemEntityData <ItemType> <ItemNum>
+	#  Output the data string
+	function GetItemEntityData {
+		echo -n "$2#$1"
+	}
+	# ParseItemEntityData <Data>
+	#  Return entityitemcnt, entityitemtype
+	function ParseItemEntityData {
+		{
+			read -r -d '#' entityitemcnt
+			read -r entityitemtype
+		} < <(echo -n "$1")
+	}
+
 	# DiscribeEntity <ID>
 	function DiscribeEntity {
 		case "${entities["$1"]}" in
 			0)
-				{
-					read -r -d '#' entityitemcnt
-					read -r entityitemtype
-				} < <(echo -n "${entdatas[$1]}")
-				echo -n 'Item '"$entityitemcnt"' * '
-				PrintChar "$entityitemtype"
-				echo -n $'\e[0m'
+				echo -n 'Item '
+				ParseItemEntityData "${entdatas["$1"]}"
+				DescribeItem "$entityitemtype" '' "$entityitemcnt"
 		esac
 	}
 }

@@ -12,12 +12,13 @@
 	function InvPick {
 		invpickcnt="${2:-1}"
 		for((invi=0;invi<invsize;++invi));do
-			[ "${inv[i]:-$1}" == "$1" ] && {
-				inv[i]="$1"
-				invc[i]="$[invc+invpickcnt]"
+			[ "${inv[invi]:-$1}" == "$1" ] && {
+				inv[invi]="$1"
+				invc[invi]="$[${invc[invi]}+invpickcnt]"
 				invmaxstack=64
-				[ "$invpickcnt" -gt "$invmaxstack" ] && {
-					invpickcnt="$[invpickcnt-invmaxstack]"
+				[ "${invc[invi]}" -gt "$invmaxstack" ] && {
+					invpickcnt="$[${invc[invi]}-invmaxstack]"
+					invc[invi]="$invmaxstack"
 					true
 				} || {
 					break
@@ -57,5 +58,19 @@
 		invcswtmp="${invc[$1]}" invswtmp="${inv[$1]}"
 		invc[$1]="${invc[$2]}" inv[$1]="${inv[$2]}"
 		invc[$2]="$invcswtmp" inv[$2]="$invswtmp"
+	}
+	# DescribeItem <Type> <Num>
+	#  output the item describtion
+	function DescribeItem {
+		echo -n "$2 * $1"$'\e[0m'
+	}
+	function ShowInventory {
+		showinvwarp=5
+		echo -n 'Inventory:'
+		for((invi=0;invi<invsize;++invi));do
+			[ "$[invi%showinvwarp]" == 0 ] && echo -n $'\n\e[K'
+			[ "${invc[invi]}" -gt 1 ] && echo -n "${invc[invi]}*"
+			echo -n "${inv[invi]:-Nothing}"$'\t'
+		done
 	}
 }
