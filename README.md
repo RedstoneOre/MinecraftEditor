@@ -49,9 +49,9 @@ Use ^C to Interrupt
 - - - [ ] Entity Moving
 - - [ ] Inventory
 - - - [x] Support
-- - - [ ] Displaying
+- - - [x] Displaying
 - - - [ ] Item Operating
-- - - [ ] Pick
+- - - [x] Pick
 - - - [ ] Drop
 - [ ] Optimize
 - - [ ] Multi-threading
