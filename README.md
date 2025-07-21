@@ -28,7 +28,7 @@ Use ^C to Interrupt
 ## Progress
 
 - [ ] File Operations
-- - [x] Basic file reading
+- - [x] Basic file reading (char 0~127 now)
 - - [ ] Multiple file reading
 - - - [x] Support
 - - [ ] File Saving
@@ -49,6 +49,7 @@ Use ^C to Interrupt
 - - - [ ] Entity Moving
 - - [ ] Inventory
 - - - [x] Support
+- - - [ ] Displaying
 - - - [ ] Item Operating
 - - - [ ] Pick
 - - - [ ] Drop
