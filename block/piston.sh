@@ -23,7 +23,6 @@
 		cpisw=0
                 cpisx="$1" cpisy="$2" cpiss="${3:-100}"
 		for((cpisi=1;cpisi<=2;++cpisi));do
-			echo 'ContractPiston' "$cpisx" "$cpisy"
 			setChar "$cpisx" "$cpisy" `getChar "$[cpisx+($4)]" "$[cpisy+($5)]"`
 			cpisw="$[cpisw+`getHardness "$(getChar "$cpisx" "$cpisy")"`]"
 			[ "$cpisw" -gt "$cpiss" ] && break
@@ -47,6 +46,22 @@
 		} || {
 			matchChar "$[pisx-1]" "$pisy" '-' && matchChar "$[pisx-2]" "$pisy" '[' && {
 				ContractPiston "$[pisx-1]" "$pisy" '' -1 0
+			}
+		}
+		matchChar "$pisx" "$[pisy+1]" '-' && {
+			ExtendPiston "$pisx" "$[pisy+1]" '' 0 1 && setChar "$pisx" "$[pisy+1]" '|'
+			true
+		} || {
+			matchChar "$pisx" "$[pisy+1]" '|' && matchChar "$pisx" "$[pisy+2]" '-' && {
+				ContractPiston "$pisx" "$[pisy+1]" '' 0 1
+			}
+		}
+		matchChar "$pisx" "$[pisy-1]" '-' && {
+			ExtendPiston "$pisx" "$[pisy-1]" '' 0 -1 && setChar "$pisx" "$[pisy-1]" '|'
+			true
+		} || {
+			matchChar "$pisx" "$[pisy-1]" '|' && matchChar "$pisx" "$[pisy-2]" '-' && {
+				ContractPiston "$pisx" "$[pisy-1]" '' 0 -1
 			}
 		}
 	}

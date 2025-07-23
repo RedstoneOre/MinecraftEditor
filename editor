@@ -133,7 +133,7 @@ while true;do
 	[ "$canceldrop" -gt 0 ] && {
 		canceldrop="$[canceldrop-1]"
 	} || {
-		[ `getChar $dim."$px" "$[py+1]"` == ' ' ] && {
+		[ `getChar "$px" "$[py+1]"` == ' ' ] && {
 			move 0 1
 			ismove=1
 		}

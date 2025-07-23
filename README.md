@@ -1,4 +1,6 @@
-![Minecraft Editor](MinecraftEditor.png)
+|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|![Minecraft Editor](MinecraftEditor.png)|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|
+|-|-|-|
+
 # Minecraft Editor
 ### Edit files just like playing minecraft
 \(Cannot save yet\)
@@ -29,8 +31,20 @@ Use \[ to dig, \] to place, \\ to interact
 Use ^C to Interrupt
 
 ## Structures
-`#]` and `[#` a piston, interact the `#` to extend
-`#-]` and `[-#` a extended piston, interact to contract
+
+```
+#]   #  -
+[#   -  #
+```
+a piston, interact the `#` to extend
+
+```
+#-]  #  -
+     |  |
+[-#  -  #
+```
+a extended piston, interact to contract
++ one piston can have multiple heads
 
 ## Progress
 
