@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_file ] || {
-	[ "$debug" -ge 1 ] && echo 'File loading header loaded'
+	[ "$debug" -ge 2 ] && echo 'File loading header loaded'
 	MCEDITOR_INC_file=
 	. "$dirp"/espmap.sh
 	# Read_File <Dimension> < (standard input)

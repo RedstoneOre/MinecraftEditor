@@ -24,9 +24,13 @@ Use i,j,k,l to move digging focus
 
 Use 1~9 to select slot in hotbar
 
-Use \[ to dig, \] to place
+Use \[ to dig, \] to place, \\ to interact
 
 Use ^C to Interrupt
+
+## Structures
+`#]` and `[#` a piston, interact the `#` to extend
+`#-]` and `[-#` a extended piston, interact to contract
 
 ## Progress
 

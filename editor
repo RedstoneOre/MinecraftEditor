@@ -9,7 +9,7 @@ mkdir -p "$dirp"/tmp
 unset MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity MCEDITOR_INC_espmap
 . "$dirp"/input.sh # use fd 12
 . "$dirp"/map.sh
-. "$dirp"/hardness.sh
+. "$dirp"/block/proportions.sh
 . "$dirp"/print.sh
 . "$dirp"/block.sh
 . "$dirp"/entity.sh
@@ -32,7 +32,7 @@ IFS=''
 #  VSP - Visible Space
 Read_File 0 < <(cat "$1";echo)
 
-[ "$debug" -ge 2 ] && {
+[ "$debug" -ge 3 ] && {
 	for((i=0;i<lines;++i));do
 		echo -n '['"${fc["$rdim.$i.c"]}"']'
 		for((j=0;j<${fc["$rdim.$i.c"]};++j));do
@@ -46,12 +46,12 @@ px=0 py=0 dim=0 vx=10 vy=5
 trap 'end=1' SIGINT
 ltty=`stty -g`
 stty -echo icanon
-[ "$debug" -lt 1 ] && {
+[ "$debug" -lt 2 ] && {
 	echo -n $'\e[0m\e[?25l'
 	clear
 }
 
-[ "$debug" -ge 1 ] && {
+[ "$debug" -ge 2 ] && {
 	CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
 	CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 2` 1 1 0
 	CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 1` 2 1 0
@@ -60,6 +60,7 @@ stty -echo icanon
 
 power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0
 . "$dirp"/operate.sh
+tickc=0
 while true;do
 	echo >&12
 	[ "$end" == 1 ] && break
@@ -88,7 +89,7 @@ while true;do
 		PrintChar NDC '' "$PrintCharStyle"
 		echo $'\e[K'
 	done
-	echo -n 'Pos: ('"$px"', '"$py"'), DigPos: ('"$focx"', '"$focy"')'$'\e[K\n'
+	echo -n 'Pos: ('"$px"', '"$py"'), Focus: ('"$focx"', '"$focy"'), Tick '"$tickc"$'\e[K\n'
 	[ "$dip" -gt 0 ] && {
 		echo -n 'Mining char '"$(PrintChar `getChar "$focx" "$focy"`)"$'\e[0m at ('"$focx"', '"$focy"'), progress '"$dip"'/'"$(getHardness `getChar "$focx" "$focy"`)"$'\e[K\n'
 	}
@@ -126,7 +127,7 @@ while true;do
 		IFS=' '
 		read -a op <&4
 		IFS=''
-		"${op[@]}"
+		"Operate_${op[@]}"
 		[ "$opsuc" == 0 ] && echo >&12
 	done
 	[ "$canceldrop" -gt 0 ] && {
@@ -148,6 +149,7 @@ while true;do
 	[ "$ismove" == 1 ] && {
 		movefocus "$px" "$py" s
 	}
+	tickc="$[tickc+1]"
 done 4< <(InputThread)
 echo 'E' >&12
 stty "$ltty"

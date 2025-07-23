@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_inventory ] || {
-	[ "$debug" -ge 1 ] && echo 'Inventory header loaded'
+	[ "$debug" -ge 2 ] && echo 'Inventory header loaded'
 	MCEDITOR_INC_inventory=
 	inv=() invc=() invdispcache=() invsize=40 selhotbar=0 lselhotbar=-1
 	for((i=0;i<invsize;++i));do

@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_entity ] || {
-	[ "$debug" -ge 1 ] && echo 'Entities header loaded'
+	[ "$debug" -ge 2 ] && echo 'Entities header loaded'
 	MCEDITOR_INC_entity=
 	. "$dirp"/inventory.sh
 	entname=()

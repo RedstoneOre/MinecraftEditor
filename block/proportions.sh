@@ -1,7 +1,7 @@
 #! /bin/bash
-[ -v MCEDITOR_INC_hardness ] || {
-	[ "$debug" -ge 1 ] && echo 'Hardness header loaded'
-	MCEDITOR_INC_hardness=
+[ -v MCEDITOR_INC_block_proportions ] || {
+	[ "$debug" -ge 2 ] && echo 'Block Proportions header loaded'
+	MCEDITOR_INC_block_proportions=
 	unset hardness
 	declare -A hardness
 	hardness['0']=0

@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_print ] || {
-	[ "$debug" -ge 1 ] && echo 'Printing header loaded'
+	[ "$debug" -ge 2 ] && echo 'Printing header loaded'
 	MCEDITOR_INC_print=
 	defaultstyle='9.-'
 	declare -A CharStyle CharPrc
@@ -41,14 +41,12 @@
 		[ "$charstyle.$charbg" == '9.7' ] && charstyle=0
 		PrintCharStyle="$charstyle.$charbg"
 		stylestr='' stylereset=0
-		[ "${3//*./}" != "$charbg" ] && {
-			stylestr="$stylestr""$(
-					[ "$charbg" == '-' ] && {
-						echo -n '0;'
-						stylerreset=1
-						true
-					} || echo -n '10'"$charbg"';'
-				)"
+		[ "${3//*./}" != "$charbg" ] && {	
+			[ "$charbg" == '-' ] && {
+				stylestr="$stylestr"'0;'
+				stylerreset=1
+				true
+			} || stylestr="$stylestr"'10'"$charbg"';'
 		}
 		{ [ "$stylerreset" == 1 ] || [ "${3//.*/}" != "$charstyle" ]; } && {
 			stylestr="${stylestr}3$charstyle"';'

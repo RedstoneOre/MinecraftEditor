@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_operate ] || {
-	[ "$debug" -ge 1 ] && echo 'Operations loaded'
+	[ "$debug" -ge 2 ] && echo 'Operations loaded'
 	MCEDITOR_INC_operate=
 	. "$dirp"/map.sh
 	. "$dirp"/block.sh
@@ -60,5 +60,9 @@
 				opsuc=1 isdig=1
 			}
 		}
+	}
+	function Operate_UseBlock {
+		UseBlock "$focx" "$focy"
+		opsuc=1
 	}
 }

@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_map ] || {
-	[ "$debug" -ge 1 ] && echo 'Map header loaded'
+	[ "$debug" -ge 2 ] && echo 'Map header loaded'
 	MCEDITOR_INC_map=
 	unset lines fc fcn fcp fcu fcd fcdelid
 	declare -A lines
@@ -34,6 +34,10 @@
 	# getChar <PosID>
 	function getChar {
 		echo -n "${fc["$dim.$2.$1"]:-OOT}"
+	}
+	# matchChar <x> <y> <Char>
+	function matchChar {
+		[ `getChar "$1" "$2"` == "$3" ]
 	}
 	# getChar <PosID> <offsetx> <offsety>
 	function getCharID {

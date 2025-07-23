@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v "$MCEDITOR_INC_espmap" ] || {
-	[ "$debug" -ge 1 ] && echo 'Espace map header loaded'
+	[ "$debug" -ge 2 ] && echo 'Espace map header loaded'
 	MCEDITOR_INC_espmap=
 	unset ctrlesp braesp
 	declare -A ctrlesp braesp
