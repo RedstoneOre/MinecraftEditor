@@ -5,7 +5,7 @@
 	. "$dirp"/map.sh
 	. "$dirp"/block.sh
 	function Operate_MoveUpwards {
-		[ `getCharOnPos "$px" "$[py-1]"` != BOL ] && {
+		[ `getChar "$px" "$[py-1]"` != BOL ] && {
 			move 0 -1; ismove=1
 			opsuc=1
 		}
@@ -21,7 +21,7 @@
 	}
 	function Operate_Jump {
 		[ "$power" -ge 20 ] && {
-			[ `getCharOnPos "$px" "$[py-1]"` != BOL ] && move 0 -1
+			[ `getChar "$px" "$[py-1]"` != BOL ] && move 0 -1
 			canceldrop="$[canceldrop+1]"
 			power="$[power-20]"
 			opsuc=1 ismove=1
@@ -49,7 +49,7 @@
 		opsuc=1
 	}
 	function Operate_Dig {
-		 [ `getCharOnPos "$focx" "$focy"` != ' ' ] && dig "$focx" "$focy" && {
+		 [ `getChar "$focx" "$focy"` != ' ' ] && dig "$focx" "$focy" && {
 			opsuc=1;isdig=1
 		}
 	}

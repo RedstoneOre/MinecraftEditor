@@ -2,14 +2,15 @@
 [ -v MCEDITOR_INC_block ] || {
 	[ "$debug" -ge 1 ] && echo 'Block interacting header loaded'
 	MCEDITOR_INC_block=
+	. "$dirp"/map.sh
 	focx=0 focy=0 dip=0
 	function dig {
 		[ "$focx" == "$1" ] && [ "$focy" == "$2" ] && {
 			dip="$[dip+1]"
-			[ "$dip" -ge "$(getHardness `getCharOnPos "$focx" "$focy"`)" ] && {
+			[ "$dip" -ge "$(getHardness `getChar "$focx" "$focy"`)" ] && {
 				dip=0
-				CreateEntity $ENTITY_ITEM `GetItemEntityData ${fc["$dim.$focy.$focx"]}` "$focx" "$focy" "$dim"
-				fc["$dim.$focy.$focx"]=' '
+				CreateEntity $ENTITY_ITEM `GetItemEntityData "$(getChar "$focx" "$focy")"` "$focx" "$focy" "$dim"
+				setChar "$focx" "$focy" ' '
 			}
 			true
 		} || {
@@ -18,7 +19,7 @@
 	}
 	# place <x> <y> <Char>
 	function place {
-		[ "${fc["$dim.$2.$1"]}" == ' ' ] && fc["$dim.$2.$1"]="$3"
+		[ `getChar "$1" "$2"` == ' ' ] && setChar "$1" "$2" "$3"
 	}
 	function movefocus {
 		tpx="$1" tpy="$2"

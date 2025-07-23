@@ -1,3 +1,4 @@
+![Minecraft Editor](MinecraftEditor.png)
 # Minecraft Editor
 ### Edit files just like playing minecraft
 \(Cannot save yet\)

@@ -51,10 +51,12 @@ stty -echo icanon
 	clear
 }
 
-CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
-CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 2` 1 1 0
-CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 1` 2 1 0
-CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 63` 2 2 0
+[ "$debug" -ge 1 ] && {
+	CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
+	CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 2` 1 1 0
+	CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 1` 2 1 0
+	CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 63` 2 2 0
+}
 
 power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0
 . "$dirp"/operate.sh
@@ -65,7 +67,7 @@ while true;do
 	PrintCharStyle="$defaultstyle"
 	for((i=py-vy;i<=py+vy;++i));do
 		for((j=px-vx;j<=px+vx;++j));do
-			prc=`getCharOnPos "$j" "$i"`
+			prc=`getChar "$j" "$i"`
 			[ "$i" == "$focy" ] && [ "$j" == "$focx" ] && prc=DIG
 			[ "$i" == "$py" ] && [ "$j" == "$px" ] && prc=PLY
 			[ "${entopos["$dim.$j.$i.c"]:-0}" -gt 0 ] && {
@@ -88,7 +90,7 @@ while true;do
 	done
 	echo -n 'Pos: ('"$px"', '"$py"'), DigPos: ('"$focx"', '"$focy"')'$'\e[K\n'
 	[ "$dip" -gt 0 ] && {
-		echo -n 'Mining char '"$(PrintChar `getCharOnPos "$focx" "$focy"`)"$'\e[0m at ('"$focx"', '"$focy"'), progress '"$dip"'/'"$(getHardness `getCharOnPos "$focx" "$focy"`)"$'\e[K\n'
+		echo -n 'Mining char '"$(PrintChar `getChar "$focx" "$focy"`)"$'\e[0m at ('"$focx"', '"$focy"'), progress '"$dip"'/'"$(getHardness `getChar "$focx" "$focy"`)"$'\e[K\n'
 	}
 	echo -n 'Power: '"$power"$'\e[K\n'
 	prentsz="${entopos["$dim.$px.$py.c"]:-0}"
@@ -130,7 +132,7 @@ while true;do
 	[ "$canceldrop" -gt 0 ] && {
 		canceldrop="$[canceldrop-1]"
 	} || {
-		[ "${fc["$dim.$[py+1].$px"]}" == ' ' ] && {
+		[ `getChar $dim."$px" "$[py+1]"` == ' ' ] && {
 			move 0 1
 			ismove=1
 		}

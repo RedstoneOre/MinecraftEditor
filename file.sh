@@ -27,4 +27,10 @@
 		done
 		lines[$rdim]="$i"
 	}
+	# Save_File <Dimension> > (output)
+	#  Save a dimension to a file
+	function Save_File {
+		savefdim="${1:-0}"
+		
+	}
 }
