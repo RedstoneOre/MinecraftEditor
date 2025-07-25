@@ -81,17 +81,21 @@
 		for((invi=0;invi<invsize;++invi));do
 			[ "$[invi%showinvwarp]" == 0 ] && echo -n $'\n\e[K'
 			[ "${invdispcache[invi]}" == '' ] && {
-				[ "${inv[invi]}" == '' ] && {
-					sinvtgitem='Nothing'
-					true
-				} || { # Just DescribeItem but it's so slow to call the func
-					dscItem="${inv[invi]:-NDC}" dscCnt="${invc[invi]}"  dscTag=` [ "$selhotbar" == "$invi" ] && { echo -n E;true; } || echo -n e `
-					[ "$dscCnt" -gt 1 ] && echo -n "$dscCnt * "
-					[ "$dscItem" == ' ' ] && dscItem='VSP'
-					sinvtgitem=`PrintChar "$dscItem" "$dscTag" "$defaultstyle"`
+				{ # Just DescribeItem but it's so slow to call the func
+					sinvtgitem="$(
+						dscItem="${inv[invi]:-NDC}" dscCnt="${invc[invi]}"  dscTag=` [ "$selhotbar" == "$invi" ] && { echo -n E;true; } || echo -n e `
+						[ "$dscCnt" -lt 1 ] && {
+							PrintChar "$dscItem" "$dscTag" "$defaultstyle"
+							echo -n Nothing
+							true
+						} || {
+							[ "$dscCnt" -gt 1 ] && echo -n "$dscCnt * "
+							[ "$dscItem" == ' ' ] && dscItem='VSP'
+							PrintChar "$dscItem" "$dscTag" "$defaultstyle"
+						}
+					)"
 				}
 				invdispcache[invi]="$sinvtgitem"
-				true
 			}
 			echo -n "${invdispcache[invi]}"
 			echo -n $'\t\e[0m'
