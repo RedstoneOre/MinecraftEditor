@@ -9,8 +9,9 @@
 	exec 12<> "$inputtmpfifo"
 	rm "$inputtmpfifo"
 	function InputThread {
+		# trap '' SIGINT
 		while read inputop <&12;do
-			[ "$inputop" == end ] && break
+			[ "$inputop" == E ] && break
 			read -N 1 op
 			case "$op" in
 				w) echo 'MoveUpwards' ;;

@@ -2,7 +2,7 @@
 [ -v MCEDITOR_INC_inventory ] || {
 	[ "$debug" -ge 2 ] && echo 'Inventory header loaded'
 	MCEDITOR_INC_inventory=
-	inv=() invc=() invdispcache=() invsize=40 selhotbar=0 lselhotbar=-1
+	inv=() invc=() invdispcache=() invsize=45 selhotbar=0 lselhotbar=-1
 	for((i=0;i<invsize;++i));do
 		inv[i]='' invc[i]=0 invdispcache[i]=''
 	done
@@ -73,7 +73,7 @@
 	}
 	# ShowInventory 
 	function ShowInventory {
-		showinvwarp=5
+		showinvwarp=9
 		[ "$selhotbar" != "$lselhotbar" ] && {
 			invdispcache[selhotbar]='' invdispcache[lselhotbar]=''
 		}

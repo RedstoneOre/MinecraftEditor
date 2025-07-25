@@ -1,7 +1,8 @@
 |&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|![Minecraft Editor](MinecraftEditor.png)|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|
 |-|-|-|
+<!--[中文(简体)](docs/README.zh_cn.md)-->
 
-# Minecraft Editor
+# Minecraft IDE
 ### Edit files just like playing minecraft
 \(Cannot save yet\)
 
@@ -22,7 +23,7 @@ cd MinecraftEditor
 
 Use w,a,s,d to move
 
-Use i,j,k,l to move digging focus
+Use i,j,k,l to move focus
 
 Use 1~9 to select slot in hotbar
 
@@ -37,7 +38,6 @@ Use ^C to Interrupt
 [#   -  #
 ```
 a piston, interact the `#` to extend
-
 ```
 #-]  #  -
      |  |
@@ -79,6 +79,7 @@ a extended piston, interact to contract
 - - - [x] Input thread
 - - - [ ] Async Print
 - - - [ ] Entity thread
+- - - [x] Display Cache
 - - [x] Free Headers Including
 - [ ] Modding
 - - [ ] \(Nothing Done\)

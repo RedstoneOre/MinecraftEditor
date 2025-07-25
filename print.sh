@@ -3,6 +3,7 @@
 	[ "$debug" -ge 2 ] && echo 'Printing header loaded'
 	MCEDITOR_INC_print=
 	defaultstyle='9.-'
+	unset CharStyle CharPrc
 	declare -A CharStyle CharPrc
 	CharStyle['PLY']='4'
 	CharPrc['PLY']='@'
@@ -68,5 +69,17 @@
 			return 0
 		}
 		return 1
+	}
+	UpdScreen=(1)
+	# GetScreenLeftUpperCorner <px> <py>
+	#  Get the posion of left upper corner on the map
+	#  Set ScrLeft as the x and ScrUpper as the y 
+	function GetScreenLeftUpperCorner {
+		((ScrLeft=px-vx))
+		((ScrUpper=py-vy))
+	}
+	# ScheduleScreenUpdate <scry>
+	function ScheduleScreenUpdate {
+		[ "$1" -ge 0 ] && [ "$1" -le "$[vy*2+1]" ] && UpdScreen[$1]=1
 	}
 }

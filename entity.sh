@@ -3,13 +3,14 @@
 	[ "$debug" -ge 2 ] && echo 'Entities header loaded'
 	MCEDITOR_INC_entity=
 	. "$dirp"/inventory.sh
+	. "$dirp"/print.sh
 	entname=()
 	ENTITY_ITEM=0 entname[0]='Item'
 	ENTITY_BATTARY=1 entname[1]='Battary'
 
 	entitycnt=0
-	unset entities entdatas entpos entopos
-	declare -A entities entdatas entpos entopos
+	unset entities entdatas entpos entopos entupdlines
+	declare -A entities entdatas entpos entopos entupdlines
 	# CreateEntity <Type> <Data> <x> <y> <Dimension>
 	#  return newEntityId as he entity ID
 	function CreateEntity {
@@ -21,6 +22,7 @@
 		entopos["$5.$3.$4.c"]="$[entoposl+1]"
 		newEntityId="$entitycnt"
 		entitycnt="$[entitycnt+1]"
+		entupdlines[$4]=
 	}
 	# DeleteEntity <ID>
 	#  Return if the entoty is exist, or won't delete any
@@ -32,6 +34,7 @@
 			read -r dentindex
 		} < <(echo -n "${entpos[$1]}")
 		unset entpos[$1]
+		entupdlines["${dentpos//*./}"]=
 		dentend="$[${entopos["$dentpos.c"]}-1]"
 		entopos["$dentpos.$dentindex"]=entopos["$dentpos.$dentend"]
 		unset entopos["$dentpos.$dentend"]
@@ -45,6 +48,7 @@
 			read -r -d '#' mentpos
 			read -r mentindex
 		} < <(echo -n "${entpos[$1]}")
+		entupdlines["${mentpos//*./}"]=
 		mentend="$[${entopos["$mentpos.c"]}-1]"
 		entopos["$mentpos.$mentindex"]="${entopos["$mentpos.$mentend"]}"
 		entpos["${entopos["$mentpos.$mentindex"]}"]="$mentpos#$mentindex"
@@ -57,6 +61,7 @@
 		entopos["$4.$2.$3.$entoposl"]="$1"
 		entpos["$1"]="$4.$2.$3#$entoposl"
 		entopos["$4.$2.$3.c"]="$[entoposl+1]"
+		entupdlines[$3]=
 		return 0
 	}
 	function ShowAllEntities {

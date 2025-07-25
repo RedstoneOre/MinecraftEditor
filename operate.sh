@@ -4,20 +4,26 @@
 	MCEDITOR_INC_operate=
 	. "$dirp"/map.sh
 	. "$dirp"/block.sh
+	. "$dirp"/print.sh
 	function Operate_MoveUpwards {
 		[ `getChar "$px" "$[py-1]"` != BOL ] && {
 			move 0 -1; ismove=1
+			UpdScreen[0]=1
 			opsuc=1
+			ScheduleScreenUpdate 0
 		}
 	}
 	function Operate_MoveLeft {
 		move -1 0; ismove=1;opsuc=1
+		ScheduleScreenUpdate 0
 	}
 	function Operate_MoveDownwards {
 		move 0 1; ismove=1;opsuc=1
+		ScheduleScreenUpdate 0
 	}
 	function Operate_MoveRight {
 		move 1 0; ismove=1;opsuc=1
+		ScheduleScreenUpdate 0
 	}
 	function Operate_Jump {
 		[ "$power" -ge 20 ] && {
@@ -25,20 +31,31 @@
 			canceldrop="$[canceldrop+1]"
 			power="$[power-20]"
 			opsuc=1 ismove=1
+			ScheduleScreenUpdate 0
 		}
 	}
 
 	function Operate_MoveFocusUpwards {
+		GetScreenLeftUpperCorner "$px" "$py"
+		ScheduleScreenUpdate "$[focy-(ScrUpper)+1]"
 		movefocus 0 -1; opsuc=1
+		ScheduleScreenUpdate "$[focy-(ScrUpper)+1]"
 	}
 	function Operate_MoveFocusLeft {
+		GetScreenLeftUpperCorner "$px" "$py"
 		movefocus -1 0; opsuc=1
+		ScheduleScreenUpdate "$[focy-(ScrUpper)+1]"
 	}
 	function Operate_MoveFocusDownwards {
+		GetScreenLeftUpperCorner "$px" "$py"
+		ScheduleScreenUpdate "$[focy-(ScrUpper)+1]"
 		movefocus 0 1; opsuc=1
+		ScheduleScreenUpdate "$[focy-(ScrUpper)+1]"
 	}
 	function Operate_MoveFocusRight {
+		GetScreenLeftUpperCorner "$px" "$py"
 		movefocus 1 0; opsuc=1
+		ScheduleScreenUpdate "$[focy-(ScrUpper)+1]"
 	}
 
 	function Operate_Nothing {
@@ -65,4 +82,6 @@
 		UseBlock "$focx" "$focy"
 		opsuc=1
 	}
+	# ^C when inputting
+	function Operate_ { :;}
 }

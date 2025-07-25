@@ -6,7 +6,7 @@ end=0
 export dirp="$(dirname "$0")"
 mkdir -p "$dirp"/tmp
 
-unset MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity MCEDITOR_INC_espmap
+unset MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity MCEDITOR_INC_espmap MCEDITOR_INC_block_proportions MCEDITOR_INC_block_piston
 . "$dirp"/input.sh # use fd 12
 . "$dirp"/map.sh
 . "$dirp"/block/proportions.sh
@@ -66,8 +66,14 @@ while true;do
 	[ "$end" == 1 ] && break
 	echo -n $'\e[0;0H'
 	PrintCharStyle="$defaultstyle"
-	for((i=py-vy;i<=py+vy;++i));do
-		for((j=px-vx;j<=px+vx;++j));do
+	GetScreenLeftUpperCorner "$px" "$py"
+	sScrLeft="$ScrLeft" sScrUpper="$ScrUpper"
+	for((i=sScrUpper;i<=py+vy;++i));do
+		[ "$UpdScreen" != 1 ] && [ "${UpdScreen[i-(sScrUpper)+1]}" != 1 ] && {
+			echo
+			continue
+		}
+		for((j=sScrLeft;j<=px+vx;++j));do
 			prc=`getChar "$j" "$i"`
 			[ "$i" == "$focy" ] && [ "$j" == "$focx" ] && prc=DIG
 			[ "$i" == "$py" ] && [ "$j" == "$px" ] && prc=PLY
@@ -78,7 +84,7 @@ while true;do
 			SetScreenShow "$[i-py]" "$[j-px]" "$hasentity$prc" && {
 				PrintIgnore "$prignore"
 				prignore=0
-			       	PrintChar "$prc" "$hasentity" "$PrintCharStyle"
+				PrintChar "$prc" "$hasentity" "$PrintCharStyle"
 				true
 			} || {
 				prignore="$[prignore+1]"
@@ -89,6 +95,8 @@ while true;do
 		PrintChar NDC '' "$PrintCharStyle"
 		echo $'\e[K'
 	done
+	true
+	UpdScreen=()
 	echo -n 'Pos: ('"$px"', '"$py"'), Focus: ('"$focx"', '"$focy"'), Tick '"$tickc"$'\e[K\n'
 	[ "$dip" -gt 0 ] && {
 		echo -n 'Mining char '"$(PrintChar `getChar "$focx" "$focy"`)"$'\e[0m at ('"$focx"', '"$focy"'), progress '"$dip"'/'"$(getHardness `getChar "$focx" "$focy"`)"$'\e[K\n'
