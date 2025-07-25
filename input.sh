@@ -9,9 +9,11 @@
 	exec 12<> "$inputtmpfifo"
 	rm "$inputtmpfifo"
 	function InputThread {
-		# trap '' SIGINT
 		while read inputop <&12;do
-			[ "$inputop" == E ] && break
+			[ "$inputop" == E ] && {
+				echo 'Input Thrad Ended' >&2
+				break
+			}
 			read -N 1 op
 			case "$op" in
 				w) echo 'MoveUpwards' ;;
@@ -31,5 +33,6 @@
 			esac
 			read -N 2147483647 -t 0.03
 		done
+		[ "$debug" -ge 1 ] && echo 'Input Thrad Ended' >&2
 	}
 }

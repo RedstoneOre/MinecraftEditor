@@ -160,6 +160,11 @@ while true;do
 	tickc="$[tickc+1]"
 done 4< <(InputThread)
 echo 'E' >&12
-stty "$ltty"
+[ "$debug" -ge 1 ] && {
+	echo 'Waiting...'
+}
 wait
-echo -n $'\ec\e[0m\e[?25h'
+[ "$debug" -lt 1 ] && echo -n $'\ec\e[0m'
+[ "$debug" -ge 1 ] && echo 'Main Thread Ended'
+echo -n $'\e[?25h'
+stty "$ltty"
