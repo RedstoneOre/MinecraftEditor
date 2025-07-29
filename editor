@@ -173,6 +173,7 @@ wait
 	Save_File 0
 	echo '-------'
 }
+Save_File "$dim" > "$1"'.mcide-snapshot-result'
 [ "$debug" -lt 1 ] && echo -n $'\ec\e[0m'
 [ "$debug" -ge 1 ] && echo 'Main Thread Ended'
 echo -n $'\e[?25h'

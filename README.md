@@ -53,7 +53,7 @@ a extended piston, interact to contract
 - - [x] Basic file reading (char 0~127 now)
 - - [ ] Multiple file reading
 - - - [x] Support
-- - [ ] File Saving
+- - [x] File Saving
 - - [ ] Save Reading
 - - [ ] Save Saving
 - [ ] Arguments Reading
