@@ -7,35 +7,33 @@
 	. "$dirp"/print.sh
 	# ExtendPiston <x> <y> <strength> <dx> <dy>
 	function ExtendPiston {
-		episw=0
-		episx="$1" episy="$2" episs="${3:-100}"
+		local pisw=0 pisx="$1" pisy="$2" piss="${3:-100}"
 		while true;do
-			matchChar "$episx" "$episy" ' ' && break
-			episw="$[episw+`getHardness "$(getChar "$episx" "$episy")"`]"
-			[ "$episw" -gt "$episs" ] && return 1
-			episx="$[episx+($4)]" episy="$[episy+($5)]"
+			matchChar "$pisx" "$pisy" ' ' && break
+			pisw="$[pisw+`getHardness "$(getChar "$pisx" "$pisy")"`]"
+			[ "$pisw" -gt "$piss" ] && return 1
+			pisx="$[pisx+($4)]" pisy="$[pisy+($5)]"
 		done
-		while [ "$episx" != "$1" ] || [ "$episy" != "$2" ] ;do
-			setChar "$episx" "$episy" `getChar "$[episx-($4)]" "$[episy-($5)]"`
-			ScheduleScreenUpdate "$[episy-(ScrUpper)+1]"
-			episx="$[episx-($4)]" episy="$[episy-($5)]"
+		while [ "$pisx" != "$1" ] || [ "$pisy" != "$2" ] ;do
+			setChar "$pisx" "$pisy" `getChar "$[pisx-($4)]" "$[pisy-($5)]"`
+			ScheduleScreenUpdate "$[pisy-(ScrUpper)+1]"
+			pisx="$[pisx-($4)]" pisy="$[pisy-($5)]"
 		done
 	}
 	function ContractPiston {
-		cpisw=0
-                cpisx="$1" cpisy="$2" cpiss="${3:-100}"
-		for((cpisi=1;cpisi<=2;++cpisi));do
-			setChar "$cpisx" "$cpisy" `getChar "$[cpisx+($4)]" "$[cpisy+($5)]"`
-			ScheduleScreenUpdate "$[cpisy-(ScrUpper)+1]"
-			cpisw="$[cpisw+`getHardness "$(getChar "$cpisx" "$cpisy")"`]"
-			[ "$cpisw" -gt "$cpiss" ] && break
-			cpisx="$[cpisx+($4)]" cpisy="$[cpisy+($5)]"
+		local pisw=0 pisx="$1" pisy="$2" piss="${3:-100}"
+		for((pisi=1;pisi<=2;++pisi));do
+			setChar "$pisx" "$pisy" `getChar "$[pisx+($4)]" "$[pisy+($5)]"`
+			ScheduleScreenUpdate "$[pisy-(ScrUpper)+1]"
+			pisw="$[pisw+`getHardness "$(getChar "$pisx" "$pisy")"`]"
+			[ "$pisw" -gt "$piss" ] && break
+			pisx="$[pisx+($4)]" pisy="$[pisy+($5)]"
 		done
-		setChar "$cpisx" "$cpisy" ' '
-		ScheduleScreenUpdate "$[cpisy-(ScrUpper)+1]"
+		setChar "$pisx" "$pisy" ' '
+		ScheduleScreenUpdate "$[pisy-(ScrUpper)+1]"
 	}
 	function UsePiston {
-		pisx="$1" pisy="$2"
+		local pisx="$1" pisy="$2"
 		GetScreenLeftUpperCorner "$px" "$py"
 		matchChar "$[pisx+1]" "$pisy" ']' && {
 			ExtendPiston "$[pisx+1]" "$pisy" '' 1 0 && setChar "$[pisx+1]" "$pisy" '-'

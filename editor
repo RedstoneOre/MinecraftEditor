@@ -6,7 +6,10 @@ end=0
 export dirp="$(dirname "$0")"
 mkdir -p "$dirp"/tmp
 
-unset MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity MCEDITOR_INC_espmap MCEDITOR_INC_block_proportions MCEDITOR_INC_block_piston
+unset	MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness \
+	MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity \
+	MCEDITOR_INC_espmap MCEDITOR_INC_block_proportions MCEDITOR_INC_block_piston \
+	MCEDITOR_INC_heap
 . "$dirp"/input.sh # use fd 12
 . "$dirp"/map.sh
 . "$dirp"/block/proportions.sh
@@ -68,6 +71,7 @@ while true;do
 	PrintCharStyle="$defaultstyle"
 	GetScreenLeftUpperCorner "$px" "$py"
 	sScrLeft="$ScrLeft" sScrUpper="$ScrUpper"
+	i= j=
 	for((i=sScrUpper;i<=py+vy;++i));do
 		[ "$UpdScreen" != 1 ] && [ "${UpdScreen[i-(sScrUpper)+1]}" != 1 ] && {
 			echo

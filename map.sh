@@ -2,6 +2,7 @@
 [ -v MCEDITOR_INC_map ] || {
 	[ "$debug" -ge 2 ] && echo 'Map header loaded'
 	MCEDITOR_INC_map=
+	. "$dirp"/heap.sh
 	unset lines fc fcn fcp fcu fcd fcdelid
 	declare -A lines
 	declare -A fc fcn fcp fcu fcd
@@ -17,9 +18,20 @@
 			fcidc="$[fcidc+1]"
 		}
 	}
-	# setChar <PosID> <Char>
+	# setChar <x> <y> <Char>
 	function setChar {
-		fc["$dim.$2.$1"]="$3"
+		[ "$3" == OOT ] && {
+			[ -v fc["$dim.$2.$1"] ] && {
+				unset fc["$dim.$2.$1"]
+				heap_delete_val fcm$dim "$1.$2"
+			}
+			true
+		} || {
+			[ -v fc["$dim.$2.$1"] ] || {
+				heap_insert fcm$dim "$1.$2"
+			}
+			fc["$dim.$2.$1"]="$3"
+		}
 	}
 	false && {
 		sposid="$1"

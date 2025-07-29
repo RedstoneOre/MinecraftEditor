@@ -1,5 +1,5 @@
 #! /bin/bash
-# Use fd 12 as te lock
+# Use fd 12 as the lock
 [ -v MCEDITOR_INC_input ] || {
 	[ "$debug" -ge 2 ] && echo 'Input header loaded'
 	MCEDITOR_INC_input=
