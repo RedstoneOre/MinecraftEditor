@@ -27,7 +27,7 @@ IFS=''
 #  POT - Part of Tab
 #  EOT - End of Tab
 #  SCT - Single char Tab
-#  DIG - The char to be digged
+#  DIG - Focus char
 #  ESP - Espace the following 1 char
 #  ELB - Brack espace left brack
 #  ERB - Brack espace right brack
@@ -163,18 +163,20 @@ while true;do
 	}
 	tickc="$[tickc+1]"
 done 4< <(InputThread)
-echo 'E' >&12
-[ "$debug" -ge 1 ] && {
-	echo 'Waiting...'
-}
-wait
+echo $'\ecSaving file...'
 [ "$debug" -ge 2 ] && {
 	echo $'\ec-------'
 	Save_File 0
 	echo '-------'
 }
-Save_File "$dim" > "$1"'.mcide-snapshot-result'
-[ "$debug" -lt 1 ] && echo -n $'\ec\e[0m'
+Save_File "$dim" > "$1"
+echo 'Endding process...'
+echo 'E' >&12
+[ "$debug" -ge 1 ] && {
+	echo 'Waiting...'
+}
+wait
+echo -n $'\e[0m'
 [ "$debug" -ge 1 ] && echo 'Main Thread Ended'
 echo -n $'\e[?25h'
 stty "$ltty"

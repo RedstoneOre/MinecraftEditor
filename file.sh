@@ -15,7 +15,7 @@
 		for((i=0;;++i));do
 			setChar 0 $i 'BOL'
 			for((j=1;;));do
-				read -n 1 -d $'\0' tfc || {
+				read -r -n 1 -d $'\0' tfc || {
 					readfileend=1
 					break
 				}
@@ -42,16 +42,17 @@
 		ldim=$dim
 		dim="${1:-0}"
 		heap_copy fcm$dim fcmsave
-		local charp= char= espst=0 espc=() esps= esprs=
+		local charp= char= espst=0 espc=() esps= esprs= started=0
 		while [ `heap_getsize fcmsave` -gt 0 ]; do
 			charp=`heap_gettop fcmsave`
 			char=`getChar ${charp//.*/} ${charp//*./}`
 			heap_pop fcmsave
-			# echo -n "[$espst]"
 			case "$espst" in
 				0) 
 					case "${char:-OOT}" in
-						BOL) echo ;;
+						BOL) 
+							[ "$started" == 1 ] && echo
+							started=1 ;;
 						OOT) ;;
 						ESP) espst=1 ;;
 						ELB) espst=2 ;;

@@ -133,7 +133,7 @@
 	# mcespace <Char>
 	#  set tfcres as the espaced char list
 	function mceespace {
-		mceec="${1:-NUL}"
+		local mceec="${1:-NUL}"
 		[ "${ctrlesp["c$mceec"]}" != '' ] && {
 			tfcres=( ESP "${ctrlesp["c$mceec"]}" )
 			return
