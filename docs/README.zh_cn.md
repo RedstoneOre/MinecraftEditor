@@ -1,7 +1,7 @@
 |&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|![Minecraft IDE](../MinecraftIDE.png)|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|
 |-|-|-|
 
-[English](../README.md)
+[English](../README.md) [Homepage](..)
 
 # Minecraft IDE
 ### 像玩 Minecraft 一样编辑文件
@@ -41,7 +41,7 @@ cd MinecraftEditor
 一个活塞，与 `#` 交互使其扩展
 ```
 #-] # -
-| |
+    | |
 [-# - #
 ```
 一个伸展的活塞，与活塞交互使其收缩
