@@ -5,7 +5,7 @@
 
 # Minecraft IDE
 ### Edit files just like playing minecraft
-\(Cannot save yet\)
+\(Cannot save as a save yet\)
 
 ## Installation
 This project can only be runned on Linux
