@@ -168,6 +168,11 @@ echo 'E' >&12
 	echo 'Waiting...'
 }
 wait
+[ "$debug" -ge 2 ] && {
+	echo $'\ec-------'
+	Save_File 0
+	echo '-------'
+}
 [ "$debug" -lt 1 ] && echo -n $'\ec\e[0m'
 [ "$debug" -ge 1 ] && echo 'Main Thread Ended'
 echo -n $'\e[?25h'
