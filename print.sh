@@ -70,6 +70,9 @@
 		}
 		return 1
 	}
+	function ResetScreenShow {
+		screen=()
+	}
 	UpdScreen=(1)
 	# GetScreenLeftUpperCorner <px> <py>
 	#  Get the posion of left upper corner on the map

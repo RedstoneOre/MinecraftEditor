@@ -4,17 +4,28 @@
 	MCEDITOR_INC_file=
 	. "$dirp"/map.sh
 	. "$dirp"/espmap.sh
-	# Read_File <Dimension> < (standard input)
+	. "$dirp"/print/progress.sh
+	# Read_File <Dimension> <FileSize> < (standard input)
 	#  Read a file into a dimension
+	#  output progress to fd 6
 	function Read_File {
-		readfileend=0
+		local readfileend=0 filesize="${2:-114514}"
 		ldim=$dim
 		dim="${1:-0}"
 		heap_init fcm$dim
-		local i= j=
+		local i= j= progupdcd=5 rchars=0
 		for((i=0;;++i));do
 			setChar 0 $i 'BOL'
 			for((j=1;;));do
+				[ "$rchars" -gt "$filesize" ] && filesize=$rchars
+				((--progupdcd, progupdcd<0)) && {
+					echo p"$((rchars*50/filesize))" >&6
+					local progtext="$((rchars*10000/filesize))"
+					while [ ${#progtext} -lt 3 ]; do progtext=0$progtext; done
+					echo t"${progtext:0:0-2}.${progtext:0-2}% $rchars/$filesize" >&6
+					progupdcd=10;
+				}
+				((++rchars))
 				read -r -n 1 -d $'\0' tfc || {
 					readfileend=1
 					break
@@ -28,6 +39,7 @@
 			done
 			[ "$readfileend" == 1 ] && break
 		done
+		echo e >&6
 		lines[$dim]="$i"
 		dim=$ldim
 	}
@@ -37,16 +49,29 @@
 	}
 	# Save_File <Dimension> > (output)
 	#  Save a dimension to a file
+	#  output progress to fd 6
 	function Save_File {
 		local unkespmsg='(What is this fucking char?)'
 		ldim=$dim
 		dim="${1:-0}"
+		echo t'Preparing data 0%' >&6
 		heap_copy fcm$dim fcmsave
+		echo p10 >&6
 		local charp= char= espst=0 espc=() esps= esprs= started=0
-		while [ `heap_getsize fcmsave` -gt 0 ]; do
+		local csize=`heap_getsize fcmsave`
+		local tcsize=$csize progupdcd=0
+		while [ "$tcsize" -gt 0 ]; do
+			((--progupdcd, progupdcd<0)) && {
+				echo p"$((5+(csize-tcsize)*45/csize))" >&6
+				local progtext="$(((csize-tcsize)*10000/csize))"
+				while [ ${#progtext} -lt 3 ]; do progtext=0$progtext; done
+				echo t"Saving ${progtext:0:0-2}.${progtext:0-2}% $((csize-tcsize+1))/$csize" >&6
+				progupdcd=10;
+			}
 			charp=`heap_gettop fcmsave`
 			char=`getChar ${charp//.*/} ${charp//*./}`
 			heap_pop fcmsave
+			tcsize=`heap_getsize fcmsave`
 			case "$espst" in
 				0) 
 					case "${char:-OOT}" in
@@ -92,6 +117,7 @@
 						}
 				esac
 		done
+		echo e >&6
 		dim=$ldim
 	}
 }

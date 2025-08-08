@@ -9,11 +9,12 @@ mkdir -p "$dirp"/tmp
 unset	MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness \
 	MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity \
 	MCEDITOR_INC_espmap MCEDITOR_INC_block_proportions MCEDITOR_INC_block_piston \
-	MCEDITOR_INC_heap
+	MCEDITOR_INC_heap MCEDITOR_INC_print_progress
 . "$dirp"/input.sh # use fd 12
 . "$dirp"/map.sh
 . "$dirp"/block/proportions.sh
 . "$dirp"/print.sh
+. "$dirp"/print/progress.sh
 . "$dirp"/block.sh
 . "$dirp"/entity.sh
 . "$dirp"/file.sh
@@ -33,7 +34,9 @@ IFS=''
 #  ERB - Brack espace right brack
 #  NDC - No displaying char, only for formattinng
 #  VSP - Visible Space
-Read_File 0 < <(cat "$1";echo)
+efile="${1:-a.txt}"
+filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
+Read_File 0 "$filesize" < <(cat "$efile";echo) 6> >(ShowProgressBar 'Reading file[' ']' 50)
 
 [ "$debug" -ge 3 ] && {
 	for((i=0;i<lines;++i));do
@@ -163,13 +166,14 @@ while true;do
 	}
 	tickc="$[tickc+1]"
 done 4< <(InputThread)
-echo $'\ecSaving file...'
+echo -n $'\ec'
 [ "$debug" -ge 2 ] && {
 	echo $'\ec-------'
-	Save_File 0
+	Save_File 0 6>&1
 	echo '-------'
 }
-Save_File "$dim" > "$1"
+{ Save_File "$dim" >"$efile" 6> >(ShowProgressBar 'Saving file [' ']' 50 >&2 ) ; } 2>&1
+echo 'File saved'
 echo 'Endding process...'
 echo 'E' >&12
 [ "$debug" -ge 1 ] && {
