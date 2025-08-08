@@ -6,43 +6,37 @@
 	for((i=0;i<invsize;++i));do
 		inv[i]='' invc[i]=0 invdispcache[i]=''
 	done
-	# InvPick <Container> <Type> <Count>
+	# InvPick <Type> <Count>
 	#  pickup item
 	#  return invPickRemaining as the remaining count
 	function InvPick {
-		local cnt="${3:-1}"
-		declare -n _inv="$1"
-		declare -n _invc="${1}c"
-		declare -n _invdispcache="${1}dispcache"
+		invpickcnt="${2:-1}"
 		for((invi=0;invi<invsize;++invi));do
 			invmaxstack=64
-			[ "${_inv[invi]:-$2}" == "$2" ] && [ "${_invc[invi]}" -lt "$invmaxstack" ] && {
-				_invdispcache[invi]=''
-				_inv[invi]="$2"
-				_invc[invi]="$[${_invc[invi]}+cnt]"
-				[ "${_invc[invi]}" -gt "$invmaxstack" ] && {
-					cnt="$[${_invc[invi]}-invmaxstack]"
-					_invc[invi]="$invmaxstack"
+			[ "${inv[invi]:-$1}" == "$1" ] && [ "${invc[invi]}" -lt "$invmaxstack" ] && {
+				invdispcache[invi]=''
+				inv[invi]="$1"
+				invc[invi]="$[${invc[invi]}+invpickcnt]"
+				[ "${invc[invi]}" -gt "$invmaxstack" ] && {
+					invpickcnt="$[${invc[invi]}-invmaxstack]"
+					invc[invi]="$invmaxstack"
 					true
 				} || {
 					break
 				}
 			}
 		done
-		invPickRemaining="$cnt"
+		invPickRemaining="$invpickcnt"
 	}
 	# InvTake <Slot> <Num>
 	#  return if successfully take the items
 	#  when fail, do nothing
 	function InvTake {
-		declare -n _inv="$1"
-		declare -n _invc="${1}c"
-		declare -n _invdispcache="${1}dispcache"
-		[ "${_invc[$1]}" -ge "$2" ] && {
-			_invdispcache[$1]=''
-			_invc[$1]="$[${_invc[$1]}-$2]"
-			[ "${_invc[$1]}" == 0 ] && {
-				_inv[$1]=''
+		[ "${invc[$1]}" -ge "$2" ] && {
+			invdispcache[$1]=''
+			invc[$1]="$[${invc[$1]}-$2]"
+			[ "${invc[$1]}" == 0 ] && {
+				inv[$1]=''
 			}
 			return 0
 		}
@@ -52,14 +46,11 @@
 	#  Add some item to a slot
 	#  return fail if cannot add(type not match or too much to add) then do nothing
 	function InvAdd {
-		declare -n _inv="$1"
-		declare -n _invc="${1}c"
-		declare -n _invdispcache="${1}dispcache"
 		invmaxstack=64
-		[ "${_inv[$1]:-$2}" == "$2" ] && [ "$[${_invc[$1]}+$3]" -le "$invmaxstack" ] && {
-			_invdispcache[$1]=''
-			_invc[$1]="$[${_invc[$1]}+$3]"
-			_inv[$1]="$2"
+		[ "${inv[$1]:-$2}" == "$2" ] && [ "$[${invc[$1]}+$3]" -le "$invmaxstack" ] && {
+			invdispcache[$1]=''
+			invc[$1]="$[${invc[$1]}+$3]"
+			inv[$1]="$2"
 			return 0
 		}
 		return 1
@@ -67,13 +58,10 @@
 
 	# InvSwap <Slot1> <Slot2>
 	function InvSwap {
-		declare -n _inv="$1"
-		declare -n _invc="${1}c"
-		declare -n _invdispcache="${1}dispcache"
-		_invdispcache[$1]=0 _invdispcache[$2]=0
-		invcswtmp="${_invc[$1]}" invswtmp="${_inv[$1]}"
-		_invc[$1]="${_invc[$2]}" _inv[$1]="${_inv[$2]}"
-		_invc[$2]="$invcswtmp" _inv[$2]="$invswtmp"
+		invdispcache[$1]=0 invdispcache[$2]=0
+		invcswtmp="${invc[$1]}" invswtmp="${inv[$1]}"
+		invc[$1]="${invc[$2]}" inv[$1]="${inv[$2]}"
+		invc[$2]="$invcswtmp" inv[$2]="$invswtmp"
 	}
 	# DescribeItem <Type> <Num> <Tags>
 	#  output the item describtion
@@ -85,21 +73,17 @@
 	}
 	# ShowInventory 
 	function ShowInventory {
-		declare -n _inv="$1"
-		declare -n _invc="${1}c"
-		declare -n _invdispcache="${1}dispcache"
-		local warp=9
+		showinvwarp=9
 		[ "$selhotbar" != "$lselhotbar" ] && {
-			_invdispcache[selhotbar]='' _invdispcache[lselhotbar]=''
+			invdispcache[selhotbar]='' invdispcache[lselhotbar]=''
 		}
 		echo -n $'Inventory:\e[K'
-		local i=
-		for((i=0;i<invsize;++i));do
-			[ "$[i%warp]" == 0 ] && echo -n $'\n\e[K'
-			[ "${_invdispcache[i]}" == '' ] && {
+		for((invi=0;invi<invsize;++invi));do
+			[ "$[invi%showinvwarp]" == 0 ] && echo -n $'\n\e[K'
+			[ "${invdispcache[invi]}" == '' ] && {
 				{ # Just DescribeItem but it's so slow to call the func
-					local sinvtgitem="$(
-						dscItem="${_inv[i]:-NDC}" dscCnt="${_invc[i]}"  dscTag=` [ "$selhotbar" == "$i" ] && { echo -n E;true; } || echo -n e `
+					sinvtgitem="$(
+						dscItem="${inv[invi]:-NDC}" dscCnt="${invc[invi]}"  dscTag=` [ "$selhotbar" == "$invi" ] && { echo -n E;true; } || echo -n e `
 						[ "$dscCnt" -lt 1 ] && {
 							PrintChar "$dscItem" "$dscTag" "$defaultstyle"
 							echo -n Nothing
@@ -111,9 +95,9 @@
 						}
 					)"
 				}
-				_invdispcache[i]="$sinvtgitem"
+				invdispcache[invi]="$sinvtgitem"
 			}
-			echo -n "${_invdispcache[i]}"
+			echo -n "${invdispcache[invi]}"
 			echo -n $'\t\e[0m'
 		done
 	}
