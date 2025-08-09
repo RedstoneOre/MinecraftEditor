@@ -172,7 +172,15 @@ echo -n $'\ec'
 	Save_File 0 6>&1
 	echo '-------'
 }
-{ Save_File "$dim" >"$efile" 6> >(ShowProgressBar 'Saving file [' ']' 50 >&2 ) ; } 2>&1
+{
+	{
+		echo t'Backing up original file' >&6
+		echo p0 >&6
+		cp -- "$efile" "$efile".meditor.backup
+		Save_File "$dim" >"$efile" &&
+			rm "$efile".meditor.backup
+	} 6> >(ShowProgressBar 'Saving file [' ']' 50 >&2 )
+} 2>&1
 echo 'File saved'
 echo 'Endding process...'
 echo 'E' >&12

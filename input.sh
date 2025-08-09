@@ -29,10 +29,25 @@
 				[1-9] ) echo 'SwitchHotbar '"$[op-1]";;
 				'[') echo 'Dig' ;;
 				']') echo 'Place' ;;
+				$'\e') Input_ParseEscape ;;
 				*) echo 'Nothing' ;;
 			esac
 			read -N 2147483647 -t 0.03
 		done
 		[ "$debug" -ge 1 ] && echo 'Input Thrad Ended' >&2
+	}
+	function Input_ParseEscape {
+		local op=
+		read -N 1 -t 0.05 op
+		case "$op" in
+			'[')
+				read -N 1 -t 0.05 op
+				case "$op" in
+					A) echo MoveUpwards ;;
+					B) echo MoveDownwards ;;
+					D) echo MoveLeft ;;
+					C) echo MoveRight ;;
+				esac
+		esac
 	}
 }
