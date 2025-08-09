@@ -1,3 +1,3 @@
 #! /bin/bash
-export dirp=`dirname "$0"`/inc
+export dirp=`dirname "$0"`/run
 . "$dirp"/editor.sh "$@"
