@@ -1,9 +1,9 @@
 #! /bin/bash
+# dirp as the .../inc/ path required
 debug="${debug:-0}"
 end=0
 [ "$debug" -lt 1 ] && exec 2> /dev/null
 
-export dirp="$(dirname "$0")"
 mkdir -p "$dirp"/tmp
 
 unset	MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness \

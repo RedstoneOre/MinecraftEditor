@@ -80,7 +80,7 @@ a extended piston, interact to contract
 - - - [x] Input thread
 - - - [ ] Async Print
 - - - [ ] Entity thread
-- - - [x] Display Cache
+- - [x] Display Cache
 - - [x] Free Headers Including
 - [ ] Modding
 - - [ ] \(Nothing Done\)
