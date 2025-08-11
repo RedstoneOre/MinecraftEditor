@@ -1,4 +1,4 @@
-|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|![Minecraft IDE](MinecraftIDE.png)|&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;|
+|![Empty Image](docs/empty.png)|![Minecraft IDE](MinecraftIDE.png)|[Empty Image](docs/empty.png)|
 |-|-|-|
 
 [中文(简体)](docs/README.zh_cn.md) [Homepage](.)
@@ -38,13 +38,13 @@ Use ^C to Interrupt
 #]   #  -
 [#   -  #
 ```
-a piston, interact the `#` to extend
+a piston, interact with the `#` to extend
 ```
 #-]  #  -
      |  |
 [-#  -  #
 ```
-a extended piston, interact to contract
+a extended piston, interact with the `#` to contract
 + one piston can have multiple heads
 
 ## Progress

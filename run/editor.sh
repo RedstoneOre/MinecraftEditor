@@ -41,18 +41,18 @@
 		trap 'end=1' SIGINT
 		ltty=`stty -g`
 		stty -echo icanon
-		[ "$debug" -lt 2 ] && {
-			echo -n $'\e[0m\e[?25l'
-			clear
-		}
 		efile="${1:-a.txt}"
 		filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
-		Read_File 0 "$filesize" < <(cat "$efile";echo) 6> >(ShowProgressBar 'Reading file[' ']' 50)
+		Read_File 0 "$filesize" < <(<"$efile") 6> >(ShowProgressBar 'Reading file[' ']' 50)
 		[ "$end" == 1 ] && {
 			editorrecover
 			return
 		}
 
+		[ "$debug" -lt 2 ] && {
+			echo -n $'\e[0m\e[?25l'
+			clear
+		}
 		[ "$debug" -ge 3 ] && {
 			for((i=0;i<lines;++i));do
 				echo -n '['"${fc["$rdim.$i.c"]}"']'
@@ -175,7 +175,7 @@
 			}
 			tickc="$[tickc+1]"
 		done 4< <(InputThread)
-		echo -n $'\ec'
+		echo -n $'\ec\e[?25l'
 		{
 			{
 				echo t'Backing up original file' >&6
