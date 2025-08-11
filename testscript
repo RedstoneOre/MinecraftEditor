@@ -1,0 +1,30 @@
+# Testing scriot of mcide
+#  use `. testscript` in bash to use
+#  test a module by using:
+#    loadmodule [module:<last>]
+#  will include the dependents
+#   Sample: loadmodule block/piston
+#  show discription of a module by using:
+#    descriptioncat [module:<last>]
+#   Sample: descriptioncat container
+
+[ "$0" == "$BASH" ] || {
+	echo 'BASH environment required'
+	false
+} && {
+	echo "Loaded successfully"
+	export dirp=`realpath .`/run
+	export debug=2
+	export lastopmodule=editor
+	function loadmodule {
+		local module="${1-$lastopmodule}"
+		lastopmodule="$module"
+		unset MCEDITOR_INC_${module//\//_}
+		. "$dirp"/"$module.sh"
+	}
+	function descriptioncat {
+		local module="${1-$lastopmodule}"
+		lastopmodule="$module"
+		grep -Ew $'^[ \t]+#' "$dirp"/"${module//\//_}.sh"
+	}
+}
