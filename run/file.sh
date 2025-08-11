@@ -17,8 +17,9 @@
 		for((i=0;;++i));do
 			setChar 0 $i 'BOL'
 			for((j=1;;));do
-				[ "$rchars" -gt "$filesize" ] && filesize=$((rchars*2))
 				((--progupdcd, progupdcd<0)) && {
+					[ "$end" == 1 ] && return
+					[ "$rchars" -gt "$filesize" ] && filesize=$((rchars*2))
 					echo p"$((rchars*50/filesize))" >&6
 					local progtext="$((rchars*10000/filesize))"
 					while [ ${#progtext} -lt 3 ]; do progtext=0$progtext; done

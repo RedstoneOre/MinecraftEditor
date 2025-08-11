@@ -2,7 +2,7 @@
 [ -v MCEDITOR_INC_entity ] || {
 	[ "$debug" -ge 2 ] && echo 'Entities header loaded'
 	MCEDITOR_INC_entity=
-	. "$dirp"/inventory.sh
+	. "$dirp"/container.sh
 	. "$dirp"/print.sh
 	entname=()
 	ENTITY_ITEM=0 entname[0]='Item'

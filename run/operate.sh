@@ -5,6 +5,7 @@
 	. "$dirp"/map.sh
 	. "$dirp"/block.sh
 	. "$dirp"/print.sh
+	. "$dirp"/container.sh
 	function Operate_MoveUpwards {
 		[ `getChar "$px" "$[py-1]"` != BOL ] && {
 			move 0 -1; ismove=1
@@ -73,7 +74,7 @@
 	function Operate_Place {
 		[ "${invc["$selhotbar"]}" -ge 1 ] && {
 			place "$focx" "$focy" "${inv["$selhotbar"]}" && {
-				InvTake "$selhotbar" 1
+				InvTake inv "$selhotbar" 1
 				opsuc=1 isdig=1
 			}
 		}
