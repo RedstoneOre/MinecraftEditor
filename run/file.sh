@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_file ] || {
-	[ "$debug" -ge 2 ] && echo 'File loading header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'File loading header loaded'
 	MCEDITOR_INC_file=
 	. "$dirp"/map.sh
 	. "$dirp"/espmap.sh

@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_print_progress ] || {
-	[ "$debug" -ge 2 ] && echo 'Progress bar header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Progress bar header loaded'
 	MCEDITOR_INC_print_progress=
 	function ShowProgressBar {
 		local prefix="${1:-[}" surfix="${2:-]}" length="${3:-10}" chars="${4:-.#}" op=

@@ -1,7 +1,7 @@
 #! /bin/bash
 # Use fd 12 as the lock
 [ -v MCEDITOR_INC_input ] || {
-	[ "$debug" -ge 2 ] && echo 'Input header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Input header loaded'
 	MCEDITOR_INC_input=
 	. "$dirp"/operate.sh
 	inputtmpfifo="$dirp"/tmp/$$.fifo
@@ -34,7 +34,7 @@
 			esac
 			read -N 2147483647 -t 0.03
 		done
-		[ "$debug" -ge 1 ] && echo 'Input Thrad Ended' >&2
+		[ "$MCEDITOR_dbgl" -ge 1 ] && echo 'Input Thrad Ended' >&2
 	}
 	function Input_ParseEscape {
 		local op=

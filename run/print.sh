@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_print ] || {
-	[ "$debug" -ge 2 ] && echo 'Printing header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Printing header loaded'
 	MCEDITOR_INC_print=
 	defaultstyle='9.-'
 	unset CharStyle CharPrc

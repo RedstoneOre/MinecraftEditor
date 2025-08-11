@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_block_proportions ] || {
-	[ "$debug" -ge 2 ] && echo 'Block proportions header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Block proportions header loaded'
 	MCEDITOR_INC_block_proportions=
 	unset hardness
 	declare -A hardness

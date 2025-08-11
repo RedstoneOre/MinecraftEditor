@@ -2,9 +2,10 @@
 [ -v MCEDITOR_INC_editor ] || {
 	MCEDITOR_INC_editor=
 	# dirp as the .../run/ path required
-	debug="${debug:-0}"
+	MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mce`
+	MCEDITOR_dbgl="${MCEDITOR_dbgl:-0}"
 	end=0
-	[ "$debug" -lt 1 ] && exec 2> /dev/null
+	[ "$MCEDITOR_dbgl" -lt 1 ] && exec 2> /dev/null
 
 	. "$dirp"/input.sh # use fd 12
 	. "$dirp"/map.sh
@@ -17,7 +18,7 @@
 	. "$dirp"/file.sh
 	function editorrecover {
 		echo -n $'\e[0m'
-		[ "$debug" -ge 1 ] && echo 'Main Thread Ended'
+		[ "$MCEDITOR_dbgl" -ge 1 ] && echo 'Main Thread Ended'
 		echo -n $'\e[?25h'
 		stty "$ltty"
 	}
@@ -49,11 +50,11 @@
 			return
 		}
 
-		[ "$debug" -lt 2 ] && {
+		[ "$MCEDITOR_dbgl" -lt 2 ] && {
 			echo -n $'\e[0m\e[?25l'
 			clear
 		}
-		[ "$debug" -ge 3 ] && {
+		[ "$MCEDITOR_dbgl" -ge 3 ] && {
 			for((i=0;i<lines;++i));do
 				echo -n '['"${fc["$rdim.$i.c"]}"']'
 				for((j=0;j<${fc["$rdim.$i.c"]};++j));do
@@ -66,7 +67,7 @@
 		px=0 py=0 dim=0 vx=10 vy=5
 		InvInit inv 45
 
-		[ "$debug" -ge 2 ] && {
+		[ "$MCEDITOR_dbgl" -ge 2 ] && {
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 2` 1 1 0
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 1` 2 1 0
@@ -127,7 +128,7 @@
 					echo $'\e[0m\e[K'
 				done
 			}
-			ShowInventory inv
+			ShowInventory inv 9 0 9
 
 			echo -n $'\e[K\n\e[K\n\e[K\n'
 			[ "${entopos["$dim.$px.$py.c"]:-0}" -gt 0 ] && {
@@ -188,7 +189,7 @@
 		echo 'File saved'
 		echo 'Endding process...'
 		echo 'E' >&12
-		[ "$debug" -ge 1 ] && {
+		[ "$MCEDITOR_dbgl" -ge 1 ] && {
 			echo 'Waiting...'
 		}
 		wait

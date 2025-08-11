@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_map ] || {
-	[ "$debug" -ge 2 ] && echo 'Map header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Map header loaded'
 	MCEDITOR_INC_map=
 	. "$dirp"/heap.sh
 	unset lines fc fcn fcp fcu fcd fcdelid

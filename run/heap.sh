@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_heap ] || {
-	[ "$debug" -ge 2 ] && echo 'Heap header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Heap header loaded'
   MCEDITOR_INC_heap=
   pos_cmp() {
     local v1=$1 v2=$2

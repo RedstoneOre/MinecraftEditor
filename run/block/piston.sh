@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_block_piston ] || {
-	[ "$debug" -ge 2 ] && echo 'Piston header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Piston header loaded'
 	MCEDITOR_INC_block_piston=
 	. "$dirp"/map.sh
 	. "$dirp"/block/proportions.sh

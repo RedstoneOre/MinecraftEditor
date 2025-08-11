@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_operate ] || {
-	[ "$debug" -ge 2 ] && echo 'Operations loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Operations loaded'
 	MCEDITOR_INC_operate=
 	. "$dirp"/map.sh
 	. "$dirp"/block.sh

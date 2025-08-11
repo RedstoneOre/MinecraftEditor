@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_container ] || {
-	[ "$debug" -ge 2 ] && echo 'Container header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Container header loaded'
 	MCEDITOR_INC_contatiner=
 	. "$dirp"/print.sh
 	selhotbar=0 lselhotbar=-1
@@ -101,19 +101,20 @@
 		[ "$1" == ' ' ] && dscItem='VSP'
 		PrintChar "$dscItem" "$3" "$defaultstyle"
 	}
-	# ShowInventory <Container>
+	# ShowInventory <Container> [warp:9] [from:0] [to:<container.size>]
+	#  show every item in the [ from, to ) of the target container
 	function ShowInventory {
 		declare -n _inv="$1"
 		declare -n _invc="${1}c"
 		declare -n _invsize="${1}size"
 		declare -n _invdispcache="${1}dispcache"
-		local warp=9
+		local warp="${2:-9}"
 		[ "$selhotbar" != "$lselhotbar" ] && {
 			_invdispcache[selhotbar]='' _invdispcache[lselhotbar]=''
 		}
 		echo -n $'Inventory:\e[K'
-		local i=
-		for((i=0;i<_invsize;++i));do
+		local i= from="${3:-0}" to="${4:-$_invsize}"
+		for((i=from;i<to;++i));do
 			[ "$[i%warp]" == 0 ] && echo -n $'\n\e[K'
 			[ "${_invdispcache[i]}" == '' ] && {
 				{ # Just DescribeItem but it's so slow to call the func

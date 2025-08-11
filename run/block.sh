@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_block ] || {
-	[ "$debug" -ge 2 ] && echo 'Block interacting header loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Block interacting header loaded'
 	MCEDITOR_INC_block=
 	. "$dirp"/map.sh
 	. "$dirp"/block/piston.sh
