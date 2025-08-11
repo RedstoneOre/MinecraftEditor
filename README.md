@@ -1,4 +1,4 @@
-|![Empty Image](docs/empty.png)|![Minecraft IDE](MinecraftIDE.png)|[Empty Image](docs/empty.png)|
+|![Empty Image](docs/empty.png)|![Minecraft IDE](MinecraftIDE.png)|![Empty Image](docs/empty.png)|
 |-|-|-|
 
 [中文(简体)](docs/README.zh_cn.md) [Homepage](.)

@@ -1,4 +1,4 @@
-|![Empty Image](empty.png)|![Minecraft IDE](../MinecraftIDE.png)|[Empty Image](empty.png)|
+|![Empty Image](empty.png)|![Minecraft IDE](../MinecraftIDE.png)|![Empty Image](empty.png)|
 |-|-|-|
 
 [English](../README.md) [Homepage](..)
