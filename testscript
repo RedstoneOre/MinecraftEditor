@@ -8,7 +8,7 @@
 #    descriptioncat [module:<last>]
 #   Sample: descriptioncat container
 
-[ "$0" == "$BASH" ] || {
+[ -v BASH ] || {
 	echo 'BASH environment required'
 	false
 } && {

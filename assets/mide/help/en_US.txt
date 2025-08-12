@@ -1,0 +1,22 @@
+\e[0;1mUsage\e[0m:
+	Launch full editor:
+			mcide [options...] [DIR]
+	Edit a file with no save:
+			mcide --simple [options.load world...] FILES...
+	Get help:
+			mcide [-h|--help]
+\e[1mOptions:\e[0m
+		--dir <dir>		use <dir> as the game dir
+		--menu, -m		show game menu
+		--create-world		create a new world
+		--load-world <file>,	load a world
+		\e[37m|\e[0m --open-world <file>,
+		\e[37m|\e[0m -w <file>
+	\e[1m For `create world`: \e[0m
+		--dim <dimid> <file>	read a dimension from a file, leave <dimid> '-' to auto set
+		\e[37m--dimension <dimid> <file>\e[0m
+		--overworld <file>,	read overworld(dim 0) from a file
+		\e[37m|\e[0m -o <file>
+	\e[1m For `load world`: \e[0m
+\e[1mSamples:\e[0m
+	\e[2mComming Soon~\e[0m		
