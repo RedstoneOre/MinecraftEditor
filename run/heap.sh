@@ -35,6 +35,13 @@
     declare -g -A "${h}_idx=()"
   }
 
+  # heap_delete <name>
+  #  delete a heap
+  heap_delete() {
+    local h=$1
+    unset "$h" "${h}_size" "${h}_idx"
+  }
+
   _swap() {
     local h=$1 i=$2 j=$3
     declare -n _heap="$h"

@@ -30,6 +30,7 @@
 				'[') echo 'Dig' ;;
 				']') echo 'Place' ;;
 				$'\e') Input_ParseEscape ;;
+				/) echo 'Command';;
 				*) echo 'Nothing' ;;
 			esac
 			read -N 2147483647 -t 0.03

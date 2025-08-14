@@ -3,14 +3,7 @@ which jq 2>&1 >/dev/null || {
 	echo 'This project depends on jq from snap/deb jq'
 	read -r -p 'Do you want to install?(y)' insjq
 	[[ "$insjq" == [yY] ]] && {
-		tmpfile="/tmp/$$.fifo"
-		exec 5<> "$tmpfile"
-		rm "$tmpfile"
-		echo -n 'sudo apt install jq' >&5
-		exec 5<&0
-		echo '---INSTALL  JQ---'
-		bash -t <&5
-		echo '---END INSTALL---'
+		sudo apt install jq
 	}
 	exit 1
 }

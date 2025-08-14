@@ -6,6 +6,7 @@
 	MCEDITOR_dbgl="${MCEDITOR_dbgl:-0}"
 	[ "$MCEDITOR_dbgl" -lt 1 ] && exec 2> /dev/null
 
+	. "$dirp"/arguments.sh
 	. "$dirp"/input.sh # use fd 12
 	. "$dirp"/map.sh
 	. "$dirp"/block/proportions.sh
@@ -15,6 +16,7 @@
 	. "$dirp"/entity.sh
 	. "$dirp"/container.sh
 	. "$dirp"/file.sh
+	. "$dirp"/dimension.sh
 	function editorrecover {
 		echo -n $'\e[0m'
 		[ "$MCEDITOR_dbgl" -ge 1 ] && echo 'Main Thread Ended'
@@ -42,14 +44,30 @@
 		ltty=`stty -g`
 		stty -echo icanon
 		ReadArguments "$@"
+		[ "$MCEDITOR_dbgl" -gt 1 ] && {
+			set | grep -w '^ArgResult'
+		}
 		mkdir -p "$dirp"/tmp
-		efile="${1:-a.txt}"
-		filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
-		local dims=(${ArgResult['alldims']})
+		eval local dims=(${ArgResult['alldims']})
+		local efile=
 		for i in "${dims[@]}";do
-			NewDimension "$"
-			Read_File 0 "$filesize" < <(<"$efile") 6> >(ShowProgressBar 'Reading file[' ']' 50)
+			NewDimension "$i"
+			local did=`GetDimensionID "$i"`
+			efile="${ArgResult["dim$i"]}"
+			local filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
+			Read_File "$did" "$filesize" < <(<"$efile") 6> >(ShowProgressBar "Reading $i from $efile[" ']' 50)
+			[ "$MCEDITOR_dbgl" -gt 1 ] && {
+				echo "Load dimension: $i(ID: $did) from $efile"
+				heap_print "fcm$did"
+			}
 		done
+		GetDimensionID mcide:overworld >/dev/null || NewDimension mcide:overworld
+		dim=`GetDimensionID mcide:overworld`
+		[ "$MCEDITOR_dbgl" -gt 1 ] && {
+			set | grep -Ew '^(num2dim|dim2num)'
+			echo "Target Dimension: $dim"
+			read
+		}
 		[ "$end" == 1 ] && {
 			editorrecover
 			return
@@ -69,7 +87,7 @@
 			done
 			read
 		}
-		px=0 py=0 dim=0 vx=10 vy=5
+		px=0 py=0 vx=10 vy=5
 		InvInit inv 45
 
 		[ "$MCEDITOR_dbgl" -ge 2 ] && {
@@ -79,7 +97,7 @@
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 63` 2 2 0
 		}
 
-		power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0
+		local power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0
 		. "$dirp"/operate.sh
 		tickc=0
 		while true;do

@@ -30,7 +30,7 @@
 			[ -v fc["$dim#$2.$1"] ] || {
 				heap_insert fcm$dim "$1.$2"
 			}
-			fc["$dim.$2.$1"]="$3"
+			fc["$dim#$2.$1"]="$3"
 		}
 	}
 	false && {

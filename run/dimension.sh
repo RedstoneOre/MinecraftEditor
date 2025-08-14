@@ -3,6 +3,7 @@
 	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'dimension loaded'
 	MCEDITOR_INC_dimension=
 	. "$dirp"/map.sh
+	. "$dirp"/heap.sh
 	declare -g -A dim2num=
 	num2dim=()
 	dimidcnt=0
@@ -12,6 +13,8 @@
 		local newid=$((dimidcnt++))
 		dim2num[d"$1"]=$newid
 		num2dim[$newid]="$1"
+		# create heap
+		heap_init fcm$newid
 	}
 	# DeleteDimension <name>
 	#  Deregister a dimension and delete its data
@@ -20,6 +23,7 @@
 		# Delete dimension data
 		local did="${dim2num[d"$1"]}"
 		unset dim2num[d"$1"] num2dim[$did]
+		heap_delete fcm$newid
 	}
 	# GetDimensionID <name>
 	function GetDimensionID {

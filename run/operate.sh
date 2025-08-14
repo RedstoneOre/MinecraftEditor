@@ -6,6 +6,7 @@
 	. "$dirp"/block.sh
 	. "$dirp"/print.sh
 	. "$dirp"/container.sh
+	. "$dirp"/dimension.sh
 	function Operate_MoveUpwards {
 		[ `getChar "$px" "$[py-1]"` != BOL ] && {
 			move 0 -1; ismove=1
@@ -82,6 +83,15 @@
 	function Operate_UseBlock {
 		UseBlock "$focx" "$focy"
 		opsuc=1
+	}
+
+	function Operate_Command {
+		local cmd=
+		echo -n 'Command: '
+		stty echo
+		read -re cmd
+		stty -echo
+		dim=`GetDimensionID $cmd`
 	}
 	# ^C when inputting
 	function Operate_ { :;}

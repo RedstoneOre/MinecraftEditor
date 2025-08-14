@@ -18,6 +18,10 @@
 		}
 		return 0
 	}
+	function ArgConnect {
+		local i=
+		for i;do echo -n "$i ";done
+	}
 	function ReadArguments {
 		local stat=generic statp= dims=() autodims=()
 		declare -gA 'ArgResult=()'
@@ -129,7 +133,7 @@
 				break
 			done
 		done
-		ArgResult["alldims"]="${dims[*]}"
+		ArgResult["alldims"]=`ArgConnect "${dims[@]}"`
 		[ "${ArgResult[task]}" == main ] && {
 		       	[ -z "${ArgResult[page]}" ] && {
 				ArgResult[page]=create_world
