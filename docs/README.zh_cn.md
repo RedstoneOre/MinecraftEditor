@@ -10,19 +10,19 @@
 ## 安装
 此项目只能在 Linux 上运行
 ```sh
-git clone https://github.com/RedstoneOre/MinecraftEditor.git
+git clone https://github.com/RedstoneOre/MinecraftIDE.git
 
 ```
 
 ## 使用方法
 ```sh
-cd MinecraftEditor
-./editor <file>
+cd MinecraftIDE
+./mcide <file>
 ```
 
 ## 操作
 
-使用 w,a,s,d 移动
+使用 w,a,s,d 或者方向键 移动
 
 使用 i,j,k,l 移动焦点
 

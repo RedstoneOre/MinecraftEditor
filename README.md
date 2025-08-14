@@ -10,19 +10,19 @@
 ## Installation
 This project can only be runned on Linux
 ```sh
-git clone https://github.com/RedstoneOre/MinecraftEditor.git
+git clone https://github.com/RedstoneOre/MinecraftIDE.git
 
 ```
 
 ## Usage
 ```sh
-cd MinecraftEditor
-./editor <file>
+cd MinecraftIDE
+./mcide <file>
 ```
 
 ## Operation
 
-Use w,a,s,d to move
+Use w,a,s,d or arrow keys to move
 
 Use i,j,k,l to move focus
 
@@ -30,7 +30,7 @@ Use 1~9 to select slot in hotbar
 
 Use \[ to dig, \] to place, \\ to interact
 
-Use ^C to Interrupt
+Use ^C to interrupt
 
 ## Structures
 
@@ -51,14 +51,15 @@ a extended piston, interact with the `#` to contract
 
 - [ ] File Operations
 - - [x] Basic file reading (char 0~127 now)
-- - [ ] Multiple file reading
-- - - [x] Support
+- - [x] Multiple file reading
 - - [x] File Saving
+- - [ ] Multiple file saving
 - - [ ] Save Reading
 - - [ ] Save Saving
-- [ ] Arguments Reading
-- - [x] Base
-- - [ ] ...
+- [x] Arguments Reading
+- - [x] Editor
+- - [ ] Simple Mode
+- - [ ] Help
 - [ ] Editing
 - - [x] Map
 - - [x] Moving
