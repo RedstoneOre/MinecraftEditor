@@ -1,9 +1,25 @@
 #! /bin/bash
+which jq 2>&1 >/dev/null || {
+	echo 'This project depends on jq from snap/deb jq'
+	read -r -p 'Do you want to install?(y)' insjq
+	[[ "$insjq" == [yY] ]] && {
+		tmpfile="/tmp/$$.fifo"
+		exec 5<> "$tmpfile"
+		rm "$tmpfile"
+		echo -n 'sudo apt install jq' >&5
+		exec 5<&0
+		echo '---INSTALL  JQ---'
+		bash -t <&5
+		echo '---END INSTALL---'
+	}
+	exit 1
+}
 unset	MCEDITOR_INC_editor \
 	MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness \
 	MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity \
 	MCEDITOR_INC_espmap MCEDITOR_INC_block_proportions MCEDITOR_INC_block_piston \
-	MCEDITOR_INC_heap MCEDITOR_INC_print_progress MCEDITOR_INC_container
+	MCEDITOR_INC_heap MCEDITOR_INC_print_progress MCEDITOR_INC_container \
+	MCEDITOR_INC_argument MCEDITOR_INC_dimension
 export dirp=`dirname "$0"`/run
 . "$dirp"/editor.sh
 editormain "$@"

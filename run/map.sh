@@ -21,13 +21,13 @@
 	# setChar <x> <y> <Char>
 	function setChar {
 		[ "$3" == OOT ] && {
-			[ -v fc["$dim.$2.$1"] ] && {
-				unset fc["$dim.$2.$1"]
+			[ -v fc["$dim#$2.$1"] ] && {
+				unset fc["$dim#$2.$1"]
 				heap_delete_val fcm$dim "$1.$2"
 			}
 			true
 		} || {
-			[ -v fc["$dim.$2.$1"] ] || {
+			[ -v fc["$dim#$2.$1"] ] || {
 				heap_insert fcm$dim "$1.$2"
 			}
 			fc["$dim.$2.$1"]="$3"
@@ -36,16 +36,16 @@
 	false && {
 		sposid="$1"
 		[ "$2" != OOT ] && {
-			fc["$dim.$sposid"]="$2"
+			fc["$dim#$sposid"]="$2"
 			true
 		} || {
-			unset fc["$dim.$sposid"]
+			unset fc["$dim#$sposid"]
 			fcdelid[${#fcdelid[@]}]="$1"
 		}
 	}
 	# getChar <PosID>
 	function getChar {
-		echo -n "${fc["$dim.$2.$1"]:-OOT}"
+		echo -n "${fc["$dim#$2.$1"]:-OOT}"
 	}
 	# matchChar <x> <y> <Char>
 	function matchChar {
@@ -57,7 +57,7 @@
 	}
 	function move {
 		tpx="$[$1+px]" tpy="$[$2+py]"
-		[ "${fc["$dim.$tpy.$tpx"]:-OOT}" != OOT ] && {
+		[ "${fc["$dim#$tpy.$tpx"]:-OOT}" != OOT ] && {
 			px="$tpx" py="$tpy"
 			return 0
 		}

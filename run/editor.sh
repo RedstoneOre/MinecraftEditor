@@ -4,7 +4,6 @@
 	# dirp as the .../run/ path required
 	MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mce`
 	MCEDITOR_dbgl="${MCEDITOR_dbgl:-0}"
-	end=0
 	[ "$MCEDITOR_dbgl" -lt 1 ] && exec 2> /dev/null
 
 	. "$dirp"/input.sh # use fd 12
@@ -23,7 +22,7 @@
 		stty "$ltty"
 	}
 	function editormain {
-		mkdir -p "$dirp"/tmp
+		end=0
 		IFS=''
 		# Special Chars
 		#  PLY - Coder
@@ -42,9 +41,15 @@
 		trap 'end=1' SIGINT
 		ltty=`stty -g`
 		stty -echo icanon
+		ReadArguments "$@"
+		mkdir -p "$dirp"/tmp
 		efile="${1:-a.txt}"
 		filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
-		Read_File 0 "$filesize" < <(<"$efile") 6> >(ShowProgressBar 'Reading file[' ']' 50)
+		local dims=(${ArgResult['alldims']})
+		for i in "${dims[@]}";do
+			NewDimension "$"
+			Read_File 0 "$filesize" < <(<"$efile") 6> >(ShowProgressBar 'Reading file[' ']' 50)
+		done
 		[ "$end" == 1 ] && {
 			editorrecover
 			return
