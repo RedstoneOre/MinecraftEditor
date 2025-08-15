@@ -30,6 +30,7 @@
   #  initialize a new heap
   heap_init() {
     local h=$1
+    unset "$h" "${h}_size" "${h}_idx"
     declare -g -a "${h}=()"
     declare -g "${h}_size=0"
     declare -g -A "${h}_idx=()"
@@ -129,11 +130,17 @@
     local out=${_heap[0]}
     # echo "Pop $out from $h" >> _heap.log
     unset _heap_idx[$out]
-    _heap[0]=${_heap[_sz-1]}
-    unset '_heap[_sz-1]'
-    _heap_idx[${_heap[0]}]=0
-    ((_sz--))
-    _heapify_down "$h" 0
+    [ "$_sz" -gt 1 ] && {
+        _heap[0]=${_heap[_sz-1]}
+        unset '_heap[_sz-1]'
+        _heap_idx[${_heap[0]}]=0
+        ((_sz--))
+        _heapify_down "$h" 0
+	true
+    } || {
+        unset _heap[0]
+        _sz=0
+    }
     return 0
   }
 
@@ -203,10 +210,20 @@
 #  copy the heap from source to destination
 heap_copy() {
   local src=$1 dst=$2
+  declare -n _src="$src"
+  declare -n _src_size="${src}_size"
   declare -n _src_idx="${src}_idx"
   heap_init "$dst"
-  for i in "${!_src_idx[@]}"; do
-    heap_insert "$dst" "$i"
+  declare -n _dst="$dst"
+  declare -n _dst_size="${dst}_size"
+  declare -n _dst_idx="${dst}_idx"
+  local i=
+  for i in "${!_src[@]}";do
+	  _dst["$i"]="${_src["$i"]}"
+  done
+  _dst_size=$_src_size
+  for i in "${!_src_idx[@]}";do
+	  _dst_idx["$i"]="${_src_idx["$i"]}"
   done
 }
 
@@ -215,5 +232,5 @@ heap_copy() {
 heap_getsize() {
   local h=$1
   declare -n _sz="${h}_size"
-  echo -n "$[_sz-1]"
+  echo -n "$_sz"
 }

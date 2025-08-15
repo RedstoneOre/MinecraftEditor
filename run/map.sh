@@ -5,7 +5,7 @@
 	. "$dirp"/heap.sh
 	unset lines fc fcn fcp fcu fcd fcdelid
 	declare -A lines
-	declare -A fc fcn fcp fcu fcd
+	declare -A fc
 	declare -A fcdelid; fcidc=0
 	# _newCharID
 	function _newCharID {

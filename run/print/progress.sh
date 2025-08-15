@@ -53,6 +53,7 @@
 				e) break;;
 			esac
 		done
-		echo -n $'\e[G\e[K'
+		echo
+		#echo -n $'\e[G\e[K'
 	}
 }

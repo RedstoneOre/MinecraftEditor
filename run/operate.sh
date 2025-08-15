@@ -6,7 +6,7 @@
 	. "$dirp"/block.sh
 	. "$dirp"/print.sh
 	. "$dirp"/container.sh
-	. "$dirp"/dimension.sh
+	. "$dirp"/command.sh
 	function Operate_MoveUpwards {
 		[ `getChar "$px" "$[py-1]"` != BOL ] && {
 			move 0 -1; ismove=1
@@ -72,17 +72,19 @@
 			opsuc=1;isdig=1
 		}
 	}
-	function Operate_Place {
-		[ "${invc["$selhotbar"]}" -ge 1 ] && {
-			place "$focx" "$focy" "${inv["$selhotbar"]}" && {
-				InvTake inv "$selhotbar" 1
-				opsuc=1 isdig=1
-			}
-		}
-	}
 	function Operate_UseBlock {
-		UseBlock "$focx" "$focy"
-		opsuc=1
+		matchChar "$focx" "$focy" ' ' && {
+			[ "${invc["$selhotbar"]}" -ge 1 ] && {
+				place "$focx" "$focy" "${inv["$selhotbar"]}" && {
+					InvTake inv "$selhotbar" 1
+					opsuc=1 isdig=1
+				}
+			}
+			true
+		} || {
+			UseBlock "$focx" "$focy"
+			opsuc=1
+		}
 	}
 
 	function Operate_Command {
@@ -91,7 +93,7 @@
 		stty echo
 		read -re cmd
 		stty -echo
-		dim=`GetDimensionID $cmd`
+		RunCommand "$cmd"
 	}
 	# ^C when inputting
 	function Operate_ { :;}

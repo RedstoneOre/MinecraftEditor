@@ -40,6 +40,8 @@
 			done
 			[ "$readfileend" == 1 ] && break
 		done
+		echo p50 >&6
+		echo tCompleted >&6
 		echo e >&6
 		lines[$dim]="$i"
 		dim=$ldim
@@ -111,13 +113,15 @@
 					} || {
 						espc[${#espc[@]}]="$char"
 					} ;;
-					3)
-						[ "$char" == 'EOT' ] && {
-							echo -n $'\t'
-							espst=0
-						}
-				esac
+				3)
+					[ "$char" == 'EOT' ] && {
+						echo -n $'\t'
+						espst=0
+					} ;;
+			esac
 		done
+		echo p50 >&6
+		echo tCompleted >&6
 		echo e >&6
 		dim=$ldim
 	}

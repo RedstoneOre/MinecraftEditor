@@ -2,7 +2,7 @@
 [ -v "$MCEDITOR_INC_espmap" ] || {
 	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Espace map header loaded'
 	MCEDITOR_INC_espmap=
-	unset ctrlesp braesp
+	unset ctrlesp braesp unesp
 	declare -A ctrlesp braesp unesp
 	ctrlesp['cNUL']='@'
 	unesp['e@']='NUL'

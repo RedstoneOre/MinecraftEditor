@@ -2,9 +2,13 @@
 [ -v MCEDITOR_INC_editor ] || {
 	MCEDITOR_INC_editor=
 	# dirp as the .../run/ path required
-	MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mce`
-	MCEDITOR_dbgl="${MCEDITOR_dbgl:-0}"
+	MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mcide`
+	[[ "$MCEDITOR_dbgl" != [0-9] ]] && MCEDITOR_dbgl=0
 	[ "$MCEDITOR_dbgl" -lt 1 ] && exec 2> /dev/null
+	[ "$MCEDITOR_dbgl" -ge 2 ] && {
+		echo "Currect debug level: $MCEDITOR_dbgl"
+		sleep 0.3
+	}
 
 	. "$dirp"/arguments.sh
 	. "$dirp"/input.sh # use fd 12
@@ -51,9 +55,9 @@
 		eval local dims=(${ArgResult['alldims']})
 		local efile=
 		for i in "${dims[@]}";do
-			NewDimension "$i"
-			local did=`GetDimensionID "$i"`
 			efile="${ArgResult["dim$i"]}"
+			NewDimension "$i" "$efile"
+			local did=`GetDimensionID "$i"`
 			local filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
 			Read_File "$did" "$filesize" < <(<"$efile") 6> >(ShowProgressBar "Reading $i from $efile[" ']' 50)
 			[ "$MCEDITOR_dbgl" -gt 1 ] && {
@@ -137,7 +141,7 @@
 			done
 			true
 			UpdScreen=()
-			echo -n 'Pos: ('"$px"', '"$py"'), Focus: ('"$focx"', '"$focy"'), Tick '"$tickc"$'\e[K\n'
+			echo -n "Pos: ($px, $py), Focus: ($focx, $focy), Dim: `GetDimensionName "$dim"`, Tick $tickc"$'\e[K\n'
 			[ "$dip" -gt 0 ] && {
 				echo -n 'Mining char '"$(PrintChar `getChar "$focx" "$focy"`)"$'\e[0m at ('"$focx"', '"$focy"'), progress '"$dip"'/'"$(getHardness `getChar "$focx" "$focy"`)"$'\e[K\n'
 			}
@@ -181,7 +185,7 @@
 			[ "$canceldrop" -gt 0 ] && {
 				canceldrop="$[canceldrop-1]"
 			} || {
-				[ `getChar "$px" "$[py+1]"` == ' ' ] && {
+				[ "`getChar "$px" "$[py+1]"`" == ' ' ] && {
 					move 0 1
 					ismove=1
 				}
@@ -200,15 +204,17 @@
 			tickc="$[tickc+1]"
 		done 4< <(InputThread)
 		echo -n $'\ec\e[?25l'
-		{
+		local i=
+		for i in "${num2dim[@]}";do
 			{
+				local efile="${dimfile["`GetDimensionID "$i"`"]}"
 				echo t'Backing up original file' >&6
 				echo p0 >&6
 				cp -- "$efile" "$efile".meditor.backup
-				Save_File "$dim" >"$efile" &&
-					rm "$efile".meditor.backup
-			} 6> >(ShowProgressBar 'Saving file [' ']' 50 >&2 )
-		} 2>&1
+				Save_File `GetDimensionID "$i"` "$efile" >"$efile" &&
+				rm -- "$efile".meditor.backup
+			} 6> >(ShowProgressBar "Saving $i to $efile [" ']' 50 >&2 )
+		done 2>&1
 		echo 'File saved'
 		echo 'Endding process...'
 		echo 'E' >&12

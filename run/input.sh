@@ -14,6 +14,14 @@
 				echo 'Input Thrad Ended' >&2
 				break
 			}
+			[ "$inputop" == I ] && {
+				# Inventory Mode
+				read -N 1 op
+				case "$op" in
+
+				esac
+				continue
+			}
 			read -N 1 op
 			case "$op" in
 				w) echo 'MoveUpwards' ;;
@@ -24,11 +32,10 @@
 				j) echo 'MoveFocusLeft' ;;
 				k) echo 'MoveFocusDownwards' ;;
 				l) echo 'MoveFocusRight' ;;
-				'\') echo 'UseBlock' ;;
+				']') echo 'UseBlock' ;;
 				' ') echo 'Jump' ;;
 				[1-9] ) echo 'SwitchHotbar '"$[op-1]";;
 				'[') echo 'Dig' ;;
-				']') echo 'Place' ;;
 				$'\e') Input_ParseEscape ;;
 				/) echo 'Command';;
 				*) echo 'Nothing' ;;

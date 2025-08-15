@@ -2,6 +2,7 @@
 [ -v MCEDITOR_INC_arguments ] || {
 	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Argument parsing loaded'
 	MCEDITOR_INC_arguments=
+	unset ArgResult
 	# ReadArgument <args>...
 	#  return map ArgResult as the parse result
 	#  return false if the argument is illegal, set ArgResult[err] as the error message

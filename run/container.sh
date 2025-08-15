@@ -7,6 +7,7 @@
 	# InvInit <Container> <Size>
 	#  initialize a container
 	function InvInit {
+		unset "$1" "${1}c" "${1}dispcache" "${1}size"
 		declare -ag "$1=()"
 		declare -ag "${1}c=()"
 		declare -ag "${1}dispcache=()"
