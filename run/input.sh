@@ -4,10 +4,7 @@
 	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Input header loaded'
 	MCEDITOR_INC_input=
 	. "$dirp"/operate.sh
-	inputtmpfifo="$dirp"/tmp/$$.fifo
-	mkfifo "$inputtmpfifo"
-	exec 12<> "$inputtmpfifo"
-	rm "$inputtmpfifo"
+	. "$dirp"/fifo.sh
 	function InputThread {
 		while read inputop <&12;do
 			[ "$inputop" == E ] && {

@@ -2,16 +2,8 @@
 [ -v MCEDITOR_INC_editor ] || {
 	MCEDITOR_INC_editor=
 	# dirp as the .../run/ path required
-	MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mcide`
-	[[ "$MCEDITOR_dbgl" != [0-9] ]] && MCEDITOR_dbgl=0
-	[ "$MCEDITOR_dbgl" -lt 1 ] && exec 2> /dev/null
-	[ "$MCEDITOR_dbgl" -ge 2 ] && {
-		echo "Currect debug level: $MCEDITOR_dbgl"
-		sleep 0.3
-	}
-
 	. "$dirp"/arguments.sh
-	. "$dirp"/input.sh # use fd 12
+	. "$dirp"/input.sh
 	. "$dirp"/map.sh
 	. "$dirp"/block/proportions.sh
 	. "$dirp"/print.sh
@@ -21,6 +13,7 @@
 	. "$dirp"/container.sh
 	. "$dirp"/file.sh
 	. "$dirp"/dimension.sh
+	. "$dirp"/fifo.sh
 	function editorrecover {
 		echo -n $'\e[0m'
 		[ "$MCEDITOR_dbgl" -ge 1 ] && echo 'Main Thread Ended'
@@ -51,7 +44,6 @@
 		[ "$MCEDITOR_dbgl" -gt 1 ] && {
 			set | grep -w '^ArgResult'
 		}
-		mkdir -p "$dirp"/tmp
 		eval local dims=(${ArgResult['alldims']})
 		local efile=
 		for i in "${dims[@]}";do

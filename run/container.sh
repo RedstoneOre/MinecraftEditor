@@ -54,7 +54,7 @@
 		declare -n _inv="$1"
 		declare -n _invc="${1}c"
 		declare -n _invdispcache="${1}dispcache"
-		[ "${_invc[$1]}" -ge "$2" ] && {
+		[ "${_invc[$2]}" -ge "$3" ] && {
 			_invdispcache[$2]=''
 			_invc[$2]="$[${_invc[$2]}-$3]"
 			[ "${_invc[$2]}" == 0 ] && {

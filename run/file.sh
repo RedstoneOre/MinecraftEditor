@@ -40,11 +40,12 @@
 			done
 			[ "$readfileend" == 1 ] && break
 		done
-		echo p50 >&6
-		echo tCompleted >&6
-		echo e >&6
 		lines[$dim]="$i"
 		dim=$ldim
+		echo p50 >&6
+		echo tCompleted >&6
+		echo 'e\n' >&6
+		WaitProgressBarEnd
 	}
 	function _file_connect_str {
 		local i=
@@ -120,9 +121,10 @@
 					} ;;
 			esac
 		done
+		dim=$ldim
 		echo p50 >&6
 		echo tCompleted >&6
-		echo e >&6
-		dim=$ldim
+		echo 'e\n' >&6
+		WaitProgressBarEnd
 	}
 }

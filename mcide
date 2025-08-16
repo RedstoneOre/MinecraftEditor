@@ -8,11 +8,26 @@ which jq 2>&1 >/dev/null || {
 	exit 1
 }
 unset	MCEDITOR_INC_editor \
-	MCEDITOR_INC_input MCEDITOR_INC_map MCEDITOR_INC_hardness \
-	MCEDITOR_INC_print MCEDITOR_INC_block MCEDITOR_INC_enitity \
-	MCEDITOR_INC_espmap MCEDITOR_INC_block_proportions MCEDITOR_INC_block_piston \
-	MCEDITOR_INC_heap MCEDITOR_INC_print_progress MCEDITOR_INC_container \
-	MCEDITOR_INC_argument MCEDITOR_INC_dimension
+	MCEDITOR_INC_input	MCEDITOR_INC_map		MCEDITOR_INC_hardness \
+	MCEDITOR_INC_print	MCEDITOR_INC_block		MCEDITOR_INC_enitity \
+	MCEDITOR_INC_espmap	MCEDITOR_INC_block_proportions	MCEDITOR_INC_block_piston \
+	MCEDITOR_INC_heap	MCEDITOR_INC_print_progress	MCEDITOR_INC_container \
+	MCEDITOR_INC_argument	MCEDITOR_INC_dimension		MCEDITOR_INC_fifo
 export dirp=`dirname "$0"`/run
+export dirlog=`dirname "$0"`/log
+export dirtmp=`dirname "$0"`/tmp
+export dirassets=`dirname "$0"`/assets
+mkdir -p "$dirlog" "$dirtmp"
+MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mcide`
+[[ "$MCEDITOR_dbgl" != [0-9] ]] && MCEDITOR_dbgl=0
+[ "$MCEDITOR_dbgl" -lt 1 ] && {
+	logfile="$dirlog/`date '+%F/%T'`#$$.log"
+	mkdir -p "${logfile%/*}"
+       	exec 2> "$logfile"
+}
+[ "$MCEDITOR_dbgl" -ge 2 ] && {
+	echo "Currect debug level: $MCEDITOR_dbgl"
+	sleep 0.3
+}
 . "$dirp"/editor.sh
 editormain "$@"

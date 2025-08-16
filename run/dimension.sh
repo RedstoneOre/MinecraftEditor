@@ -1,6 +1,6 @@
 #! /bin/bash
 [ -v MCEDITOR_INC_dimension ] || {
-	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'dimension loaded'
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Dimension header loaded'
 	MCEDITOR_INC_dimension=
 	. "$dirp"/map.sh
 	. "$dirp"/heap.sh

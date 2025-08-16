@@ -2,6 +2,7 @@
 [ -v MCEDITOR_INC_print_progress ] || {
 	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Progress bar header loaded'
 	MCEDITOR_INC_print_progress=
+	. "$dirp"/fifo.sh
 	function ShowProgressBar {
 		local prefix="${1:-[}" surfix="${2:-]}" length="${3:-10}" chars="${4:-.#}" op=
 		local st="${#prefix}"
@@ -50,10 +51,15 @@
 						done
 					}
 					tgprog=$opn;;
-				e) break;;
+				e)
+					echo -ne "$opn"
+					break;;
 			esac
 		done
-		echo
+		echo >&11
 		#echo -n $'\e[G\e[K'
+	}
+	function WaitProgressBarEnd {
+		read -r -d $'\n' -u 11
 	}
 }

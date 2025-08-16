@@ -1,7 +1,11 @@
 
 #! /bin/bash
-[ -v MCEDITOR_INC_example ] || {
-	[ "$MCEDITOR_dbgl" -ge 2 ] && echo '(module name) loaded'
-	MCEDITOR_INC_example=
-	
+[ -v MCEDITOR_INC_fifo ] || {
+	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Fifos loaded'
+	MCEDITOR_INC_fifo=
+	tmpfifo="$dirtmp"/$$.fifo
+	mkfifo "$tmpfifo"
+	exec 11<> "$tmpfifo" # block/progress	ProgressBar
+	exec 12<> "$tmpfifo" # input		InputThread
+	rm "$tmpfifo"
 }
