@@ -15,7 +15,7 @@
 			pisx="$[pisx+($4)]" pisy="$[pisy+($5)]"
 		done
 		while [ "$pisx" != "$1" ] || [ "$pisy" != "$2" ] ;do
-			setChar "$pisx" "$pisy" `getChar "$[pisx-($4)]" "$[pisy-($5)]"`
+			setChar "$pisx" "$pisy" "`getChar "$[pisx-($4)]" "$[pisy-($5)]"`"
 			ScheduleScreenUpdate "$[pisy-(ScrUpper)+1]"
 			pisx="$[pisx-($4)]" pisy="$[pisy-($5)]"
 		done
@@ -23,7 +23,7 @@
 	function ContractPiston {
 		local pisw=0 pisx="$1" pisy="$2" piss="${3:-100}"
 		for((pisi=1;pisi<=2;++pisi));do
-			setChar "$pisx" "$pisy" `getChar "$[pisx+($4)]" "$[pisy+($5)]"`
+			setChar "$pisx" "$pisy" "`getChar "$[pisx+($4)]" "$[pisy+($5)]"`"
 			ScheduleScreenUpdate "$[pisy-(ScrUpper)+1]"
 			pisw="$[pisw+`getHardness "$(getChar "$pisx" "$pisy")"`]"
 			[ "$pisw" -gt "$piss" ] && break

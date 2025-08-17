@@ -20,18 +20,27 @@
 	}
 	# setChar <x> <y> <Char>
 	function setChar {
+		echo -n 'setChar ' >&2
 		[ "$3" == OOT ] && {
+			echo -n 'OOT ' >&2
 			[ -v fc["$dim#$2.$1"] ] && {
+				echo -n 'del ' >&2
 				unset fc["$dim#$2.$1"]
+				echo -n heap_delete_val fcm$dim "$1.$2" >&2
+				heap_print fcm$dim >&2
 				heap_delete_val fcm$dim "$1.$2"
 			}
 			true
 		} || {
+			echo -n 'Other ' >&2
 			[ -v fc["$dim#$2.$1"] ] || {
+				echo -n 'new ' >&2
+				echo -n heap_insert fcm$dim "$1.$2" >&2
 				heap_insert fcm$dim "$1.$2"
 			}
 			fc["$dim#$2.$1"]="$3"
 		}
+		echo e >&2
 	}
 	false && {
 		sposid="$1"
@@ -49,7 +58,7 @@
 	}
 	# matchChar <x> <y> <Char>
 	function matchChar {
-		[ `getChar "$1" "$2"` == "$3" ]
+		[ "`getChar "$1" "$2"`" == "$3" ]
 	}
 	# getChar <PosID> <offsetx> <offsety>
 	function getCharID {

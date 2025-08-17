@@ -68,7 +68,7 @@
 		opsuc=1
 	}
 	function Operate_Dig {
-		 [ `getChar "$focx" "$focy"` != ' ' ] && dig "$focx" "$focy" && {
+		 [ "`getChar "$focx" "$focy"`" != ' ' ] && dig "$focx" "$focy" && {
 			opsuc=1;isdig=1
 		}
 	}

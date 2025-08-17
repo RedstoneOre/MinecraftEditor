@@ -1,7 +1,7 @@
 |![Empty Image](docs/empty.png)|![Minecraft IDE](MinecraftIDE.png)|![Empty Image](docs/empty.png)|
 |-|-|-|
 
-[中文(简体)](docs/README.zh_cn.md) [Homepage](.)
+[中文(简体)](docs/README.zh-CN.md) [Homepage](.)
 
 # Minecraft IDE
 ### Edit files just like playing minecraft
@@ -28,7 +28,7 @@ Use i,j,k,l to move focus
 
 Use 1~9 to select slot in hotbar
 
-Use \[ to dig, \] to place, \\ to interact
+Use \[ to dig, \] to place/interact
 
 Use ^C to interrupt
 

@@ -19,6 +19,7 @@ git clone https://github.com/RedstoneOre/MinecraftIDE.git
 cd MinecraftIDE
 ./mcide <file>
 ```
++ [详细的参数用法](../assets/)
 
 ## 操作
 
@@ -28,7 +29,7 @@ cd MinecraftIDE
 
 使用 1~9 选择快捷栏中的插槽
 
-使用 \[ 挖掘，\] 放置，\\ 交互
+使用 \[ 挖掘，\] 放置/交互
 
 使用 ^C 中断
 
