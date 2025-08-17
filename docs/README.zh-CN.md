@@ -19,7 +19,7 @@ git clone https://github.com/RedstoneOre/MinecraftIDE.git
 cd MinecraftIDE
 ./mcide <file>
 ```
-+ [详细的参数用法](../assets/)
+[详细的参数用法](docs/arguments/zh_CN.txt)
 
 ## 操作
 

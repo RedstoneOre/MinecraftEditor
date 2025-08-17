@@ -19,6 +19,7 @@ git clone https://github.com/RedstoneOre/MinecraftIDE.git
 cd MinecraftIDE
 ./mcide <file>
 ```
+See [arguments](docs/arguments/en_US.txt) for argument usage details
 
 ## Operation
 
@@ -53,7 +54,7 @@ a extended piston, interact with the `#` to contract
 - - [x] Basic file reading (char 0~127 now)
 - - [x] Multiple file reading
 - - [x] File Saving
-- - [ ] Multiple file saving
+- - [x] Multiple file saving
 - - [ ] Save Reading
 - - [ ] Save Saving
 - [x] Arguments Reading

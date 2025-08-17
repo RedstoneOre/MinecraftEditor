@@ -1,0 +1,28 @@
+\e[0;1m用法\e[0m:
+	启动编辑器:
+		mcide [options...] FILES...
+	(\e[31m暂时无法使用\e[0m) 获取帮助:
+		mcide [-h|--help]
+\e[1m选项:\e[0m
+	\e[31m红色\e[0;4m的选项暂时\e[1m无法使用\e[0m
+	\e[33m黄色\e[0;4m的选项暂时\e[1m没有效果\e[0m
+		\e[33m--dir dir:PATH		将$dir作为游戏文件夹\e[0m
+		\e[33m--menu, -m		显示游戏菜单(任务=menu)\e[0m
+		\e[31m--create-world		创建一个新的世界(任务=create_world)\e[0m
+		\e[31m--load-world file:PATH,	加载世界\e[0m
+		\e[37m|\e[0m \e[31m--open-world file:PATH,\e[0m
+		\e[37m|\e[0m \e[31m-w file:PATH\e[0m
+		\e[33m--language lang:LANG	设置语言
+		\e[37m|\e[0m \e[33m--lang lang:LANG, -l lang:LANG\e[0m
+	* 如果任意维度在参数中被定义, 默认的任务将被设为`create_world`, 否则它
+	*  将被设为`menu`(现在仍然会做`create_world`任务)
+	\e[1m对于`menu`任务: \e[0m
+	\e[1m对于`create_world`任务: \e[0m
+		--dim dimid:DID file:PATH	从一个文件中读取维度, \e[31m设$dimid为'-'可以自动设置\e[0m
+		\e[37m|\e[0m --dimension dimid:DID file:PATH,
+		\e[37m|\e[0m -d dimid:DID file:PATH
+		--overworld file:PATH		从一个文件中读取主世界(维度 `mcide:overworld`)
+		\e[37m|\e[0m -o file:PATH
+	\e[1m对于`load world`任务: \e[0m
+\e[1m示例:\e[0m
+	\e[2mComming Soon awa\e[0m

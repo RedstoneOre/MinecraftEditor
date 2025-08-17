@@ -41,7 +41,7 @@
 								case "$i" in
 									--overworld)
 										stat=dim statp='mcide:overworld' ;;
-									--dim)
+									--dim|--dimension)
 										stat=dim_id statp=;;
 									--open-file|--dim-append)
 										stat=dim statp= ;;
