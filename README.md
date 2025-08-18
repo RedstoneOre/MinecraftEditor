@@ -27,7 +27,13 @@ Use w,a,s,d or arrow keys to move
 
 Use i,j,k,l to move focus
 
-Use 1~9 to select slot in hotbar
+Use e to open/close inventory
+
+Use arrow keys to move cursor in the inventory
+
+use \[ to left click, \] to right click in the inventory
+
+Use 1~9 to select slot in hotbar / swap items with hotbar in the inventory
 
 Use \[ to dig, \] to place/interact
 
@@ -75,7 +81,7 @@ a extended piston, interact with the `#` to contract
 - - [ ] Inventory
 - - - [x] Support
 - - - [x] Displaying
-- - - [ ] Item Operating
+- - - [x] Item Operating
 - - - [x] Pick
 - - - [ ] Drop
 - [ ] Optimize
