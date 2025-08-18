@@ -20,7 +20,7 @@ export dirassets=`dirname "$0"`/assets
 mkdir -p "$dirlog" "$dirtmp"
 MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mcide`
 [[ "$MCEDITOR_dbgl" != [0-9] ]] && MCEDITOR_dbgl=0
-[ "$MCEDITOR_dbgl" -lt 1 ] && {
+{
 	logfile="$dirlog/`date '+%F/%T'`#$$.log"
 	mkdir -p "${logfile%/*}"
        	exec 2> "$logfile"

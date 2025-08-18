@@ -5,6 +5,7 @@
 	. "$dirp"/map.sh
 	. "$dirp"/espmap.sh
 	. "$dirp"/print/progress.sh
+	. "$dirp"/heap.sh
 	# Read_File <Dimension> <FileSize> < (standard input)
 	#  Read a file into a dimension
 	#  output progress to fd 6

@@ -61,7 +61,7 @@
 	}
 
 	function Operate_Nothing {
-		opsuc=1
+		: # opsuc=1
 	}
 	function Operate_SwitchHotbar {
 		lselhotbar="$selhotbar" selhotbar="$1"
@@ -86,6 +86,9 @@
 			opsuc=1
 		}
 	}
+	function Operate_OpenInventory {
+		invopen=1 opsuc=1
+	}
 
 	function Operate_Command {
 		local cmd=
@@ -97,4 +100,31 @@
 	}
 	# ^C when inputting
 	function Operate_ { :;}
+
+	function OperateInv_InvMU {
+		((invselected-9>=0)) && ((invselected-=9))
+	}
+	function OperateInv_InvMD {
+		((invselected+9<PLAYERINV_INVSIZE)) && ((invselected+=9))
+	}
+	function OperateInv_InvML {
+		((invselected-1>=0)) && ((invselected-=1))
+	}
+	function OperateInv_InvMR {
+		((invselected+1<PLAYERINV_INVSIZE)) && ((invselected+=1))
+	}
+	function OperateInv_InvLC {
+		InvSwap inv $invselected inv $PLAYERINV_CURSOR
+	}
+	function OperateInv_InvSwithHotbar {
+		[ -n "${inv[$PLAYERINV_CURSOR]}" ] && {
+			InvSwap inv $PLAYERINV_CURSOR inv $1
+			true
+		} || {
+			InvSwap inv $invselected inv $1
+		}
+	}
+	function OperateInv_InvClose {
+		invopen=0
+	}
 }

@@ -89,7 +89,7 @@
 		declare -n _inv2="$3"
 		declare -n _invc2="${3}c"
 		declare -n _invdispcache2="${3}dispcache"
-		_invdispcache[$2]=0 _invdispcache2[$4]=0
+		_invdispcache[$2]= _invdispcache2[$4]=
 		invcswtmp="${_invc[$2]}" invswtmp="${_inv[$2]}"
 		_invc[$2]="${_invc2[$4]}" _inv[$2]="${_inv2[$4]}"
 		_invc2[$4]="$invcswtmp" _inv2[$4]="$invswtmp"
@@ -102,6 +102,11 @@
 		[ "$1" == ' ' ] && dscItem='VSP'
 		PrintChar "$dscItem" "$3" "$defaultstyle"
 	}
+	# RemoveCache <Container> <Slot>
+	function RemoveCache {
+		declare -n _invdispcache="${1}dispcache"
+		_invdispcache[$2]=''
+	}
 	# ShowInventory <Container> [warp:9] [from:0] [to:<container.size>]
 	#  show every item in the [ from, to ) of the target container
 	function ShowInventory {
@@ -110,17 +115,18 @@
 		declare -n _invsize="${1}size"
 		declare -n _invdispcache="${1}dispcache"
 		local warp="${2:-9}"
-		[ "$selhotbar" != "$lselhotbar" ] && {
-			_invdispcache[selhotbar]='' _invdispcache[lselhotbar]=''
+		local sel="${5:-$selhotbar}" lsel="${6:-$sel}"
+		[ "$sel" != "$lsel" ] && {
+			_invdispcache[sel]='' _invdispcache[lsel]=''
 		}
-		echo -n $'Inventory:\e[K'
+		echo -n $'\e[K'
 		local i= from="${3:-0}" to="${4:-$_invsize}"
 		for((i=from;i<to;++i));do
-			[ "$[i%warp]" == 0 ] && echo -n $'\n\e[K'
+			[ "$(((i-from)%warp))" == 0 ] && ((i!=from)) && echo -n $'\n\e[K'
 			[ "${_invdispcache[i]}" == '' ] && {
 				{ # Just DescribeItem but it's so slow to call the func
 					local sinvtgitem="$(
-						dscItem="${_inv[i]:-NDC}" dscCnt="${_invc[i]}"  dscTag=` [ "$selhotbar" == "$i" ] && { echo -n E;true; } || echo -n e `
+						dscItem="${_inv[i]:-NDC}" dscCnt="${_invc[i]}"  dscTag=` [ "$sel" == "$i" ] && { echo -n E;true; } || echo -n e `
 						[ "$dscCnt" -lt 1 ] && {
 							PrintChar "$dscItem" "$dscTag" "$defaultstyle"
 							echo -n Nothing
@@ -138,4 +144,10 @@
 			echo -n $'\t\e[0m'
 		done
 	}
+
+	# Player Inventory
+	PLAYERINV_SIZE=46
+	PLAYERINV_CURSOR=45
+	PLAYERINV_HOTBAR=9
+	PLAYERINV_INVSIZE=45
 }

@@ -37,14 +37,19 @@
 		#  ERB - Brack espace right brack
 		#  NDC - No displaying char, only for formattinng
 		#  VSP - Visible Space
+		ReadArguments "$@" || {
+			echo "${ArgResult['err']}"
+			return 1
+		}
 		trap 'end=1' SIGINT
 		ltty=`stty -g`
 		stty -echo icanon
-		ReadArguments "$@"
 		[ "$MCEDITOR_dbgl" -gt 1 ] && {
 			set | grep -w '^ArgResult'
 		}
 		eval local dims=(${ArgResult['alldims']})
+		[ -v ArgResult['show log on exit'] ]; local showlogonexit=$[1-$?]
+
 		local efile=
 		for i in "${dims[@]}";do
 			efile="${ArgResult["dim$i"]}"
@@ -84,7 +89,7 @@
 			read
 		}
 		px=0 py=0 vx=10 vy=5
-		InvInit inv 45
+		InvInit inv 46
 
 		[ "$MCEDITOR_dbgl" -ge 2 ] && {
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
@@ -93,46 +98,71 @@
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 63` 2 2 0
 		}
 
-		local power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0
+		local power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0 invopen=0 linvopen=0 linvselected=
+		unset invselected; invselected=
 		. "$dirp"/operate.sh
 		tickc=0
 		while true;do
-			echo >&12
-			[ "$end" == 1 ] && break
-			echo -n $'\e[0;0H'
-			PrintCharStyle="$defaultstyle"
-			GetScreenLeftUpperCorner "$px" "$py"
-			sScrLeft="$ScrLeft" sScrUpper="$ScrUpper"
-			local i= j=
-			for((i=sScrUpper;i<=py+vy;++i));do
-				[ "$UpdScreen" != 1 ] && [ "${UpdScreen[i-(sScrUpper)+1]}" != 1 ] && {
-					echo
-					continue
+			local tinvopen=$invopen
+			[ "$invopen" == 1 ] && {
+				echo -n $'\e[0;0H\ec'
+				echo I >&12
+				[ "$end" == 1 ] && break
+				[ -z "$invselected" ] && {
+					invselected=$selhotbar
+					linvselected=$invselected
 				}
-				for((j=sScrLeft;j<=px+vx;++j));do
-					prc=`getChar "$j" "$i"`
-					[ "$i" == "$focy" ] && [ "$j" == "$focx" ] && prc=DIG
-					[ "$i" == "$py" ] && [ "$j" == "$px" ] && prc=PLY
-					[ "${entopos["$dim.$j.$i.c"]:-0}" -gt 0 ] && {
-						hasentity='E'
-						true
-					} || hasentity='e'
-					SetScreenShow "$[i-py]" "$[j-px]" "$hasentity$prc" && {
-						PrintIgnore "$prignore"
-						prignore=0
-						PrintChar "$prc" "$hasentity" "$PrintCharStyle"
-						true
-					} || {
-						prignore="$[prignore+1]"
+				RemoveCache inv $selhotbar
+				ShowInventory inv 9 0 45 $invselected $linvselected
+				echo -n $'\nCursor: '
+				RemoveCache inv $invselected
+				ShowInventory inv 1 45
+				echo
+				linvselected=$invselected
+				true
+			} || {
+				echo >&12
+				[ "$end" == 1 ] && break
+				echo -n $'\e[0;0H'
+				[ "$linvopen" == 1 ] && {
+					invselected= linvselected=
+					ScheduleScreenUpdate 0
+					ResetScreenShow
+				}
+				PrintCharStyle="$defaultstyle"
+				GetScreenLeftUpperCorner "$px" "$py"
+				sScrLeft="$ScrLeft" sScrUpper="$ScrUpper"
+				local i= j=
+				for((i=sScrUpper;i<=py+vy;++i));do
+					[ "$UpdScreen" != 1 ] && [ "${UpdScreen[i-(sScrUpper)+1]}" != 1 ] && {
+						echo
+						continue
 					}
+					for((j=sScrLeft;j<=px+vx;++j));do
+						prc=`getChar "$j" "$i"`
+						[ "$i" == "$focy" ] && [ "$j" == "$focx" ] && prc=DIG
+						[ "$i" == "$py" ] && [ "$j" == "$px" ] && prc=PLY
+						[ "${entopos["$dim.$j.$i.c"]:-0}" -gt 0 ] && {
+							hasentity='E'
+							true
+						} || hasentity='e'
+						SetScreenShow "$[i-py]" "$[j-px]" "$hasentity$prc" && {
+							PrintIgnore "$prignore"
+							prignore=0
+							PrintChar "$prc" "$hasentity" "$PrintCharStyle"
+							true
+						} || {
+							prignore="$[prignore+1]"
+						}
+					done
+					PrintIgnore "$prignore"
+					prignore=0
+					PrintChar NDC '' "$PrintCharStyle"
+					echo $'\e[K'
 				done
-				PrintIgnore "$prignore"
-				prignore=0
-				PrintChar NDC '' "$PrintCharStyle"
-				echo $'\e[K'
-			done
-			true
-			UpdScreen=()
+				true
+				UpdScreen=()
+			}
 			echo -n "Pos: ($px, $py), Focus: ($focx, $focy), Dim: `GetDimensionName "$dim"`, Tick $tickc"$'\e[K\n'
 			[ "$dip" -gt 0 ] && {
 				echo -n 'Mining char '"$(PrintChar `getChar "$focx" "$focy"`)"$'\e[0m at ('"$focx"', '"$focy"'), progress '"$dip"'/'"$(getHardness `getChar "$focx" "$focy"`)"$'\e[K\n'
@@ -147,7 +177,7 @@
 					echo $'\e[0m\e[K'
 				done
 			}
-			ShowInventory inv 9 0 9
+			ShowInventory inv 9 0 9 '' $lselhotbar ;echo
 
 			echo -n $'\e[K\n\e[K\n\e[K\n'
 			[ "${entopos["$dim.$px.$py.c"]:-0}" -gt 0 ] && {
@@ -164,36 +194,46 @@
 					DeleteEntity "$i"
 				done
 			}
-			opsuc=0
-			while [ "$opsuc" == 0 ] && [ "$end" != 1 ];do
-				isdig=0 ismove=0
+			[ "$tinvopen" != 1 ] && {
+				opsuc=0
+				while [ "$opsuc" == 0 ] && [ "$end" != 1 ];do
+					isdig=0 ismove=0
+					op=''
+					IFS=' '
+					read -a op <&4
+					IFS=''
+					"Operate_${op[@]}"
+					[ "$opsuc" == 0 ] && echo >&12
+				done
+				[ "$canceldrop" -gt 0 ] && {
+					canceldrop="$[canceldrop-1]"
+				} || {
+					[ "`getChar "$px" "$[py+1]"`" == ' ' ] && {
+						move 0 1
+						ismove=1
+					}
+				}
+				power="$[power+1]"
+				[ "$isdig" == 0 ] && {
+					dip="$[dip-3]"
+					[ "$dip" -lt 0 ] && dip=0
+					true
+				} || {
+					[ "$power" -gt 0 ] && power="$[power-1]"
+				}
+				[ "$ismove" == 1 ] && {
+					movefocus "$px" "$py" s
+				}
+				linvopen="$invopen"
+				tickc="$[tickc+1]"
+				true
+			} || {
 				op=''
 				IFS=' '
 				read -a op <&4
 				IFS=''
-				"Operate_${op[@]}"
-				[ "$opsuc" == 0 ] && echo >&12
-			done
-			[ "$canceldrop" -gt 0 ] && {
-				canceldrop="$[canceldrop-1]"
-			} || {
-				[ "`getChar "$px" "$[py+1]"`" == ' ' ] && {
-					move 0 1
-					ismove=1
-				}
+				"OperateInv_${op[@]}"
 			}
-			power="$[power+1]"
-			[ "$isdig" == 0 ] && {
-				dip="$[dip-3]"
-				[ "$dip" -lt 0 ] && dip=0
-				true
-			} || {
-				[ "$power" -gt 0 ] && power="$[power-1]"
-			}
-			[ "$ismove" == 1 ] && {
-				movefocus "$px" "$py" s
-			}
-			tickc="$[tickc+1]"
 		done 4< <(InputThread)
 		echo -n $'\ec\e[?25l'
 		local i=
@@ -215,5 +255,6 @@
 		}
 		wait
 		editorrecover
+		[ "$showlogonexit" == 1 ] && vim "$logfile"
 	}
 }

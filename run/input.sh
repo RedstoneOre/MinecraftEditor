@@ -15,28 +15,38 @@
 				# Inventory Mode
 				read -N 1 op
 				case "$op" in
-
+					\[) echo 'InvLC' ;;
+					\]) echo 'InvRC' ;;
+					$'\033') Input_InvParseEscape ;;
+					$'\035') echo 'InvCRC' ;;
+					\{) echo 'InvSLC' ;;
+					\}) echo 'InvSRC' ;;
+					[1-9]) echo 'InvSwithHotbar '"$[op-1]" ;;
+					e) echo 'InvClose' ;;
+					*) echo '' ;;
 				esac
-				continue
+				true
+			} || {
+				read -N 1 op
+				case "$op" in
+					w) echo 'MoveUpwards' ;;
+					a) echo 'MoveLeft' ;;
+					s) echo 'MoveDownwards' ;;
+					d) echo 'MoveRight' ;;
+					i) echo 'MoveFocusUpwards' ;;
+					j) echo 'MoveFocusLeft' ;;
+					k) echo 'MoveFocusDownwards' ;;
+					l) echo 'MoveFocusRight' ;;
+					e) echo 'OpenInventory' ;;
+					']') echo 'UseBlock' ;;
+					' ') echo 'Jump' ;;
+					[1-9] ) echo 'SwitchHotbar '"$[op-1]";;
+					'[') echo 'Dig' ;;
+					$'\e') Input_ParseEscape ;;
+					/) echo 'Command';;
+					*) echo 'Nothing' ;;
+				esac
 			}
-			read -N 1 op
-			case "$op" in
-				w) echo 'MoveUpwards' ;;
-				a) echo 'MoveLeft' ;;
-				s) echo 'MoveDownwards' ;;
-				d) echo 'MoveRight' ;;
-				i) echo 'MoveFocusUpwards' ;;
-				j) echo 'MoveFocusLeft' ;;
-				k) echo 'MoveFocusDownwards' ;;
-				l) echo 'MoveFocusRight' ;;
-				']') echo 'UseBlock' ;;
-				' ') echo 'Jump' ;;
-				[1-9] ) echo 'SwitchHotbar '"$[op-1]";;
-				'[') echo 'Dig' ;;
-				$'\e') Input_ParseEscape ;;
-				/) echo 'Command';;
-				*) echo 'Nothing' ;;
-			esac
 			read -N 2147483647 -t 0.03
 		done
 		[ "$MCEDITOR_dbgl" -ge 1 ] && echo 'Input Thrad Ended' >&2
@@ -52,7 +62,23 @@
 					B) echo MoveDownwards ;;
 					D) echo MoveLeft ;;
 					C) echo MoveRight ;;
-				esac
+				esac ;;
+		esac
+	}
+	function Input_InvParseEscape {
+		local op=
+		read -N 1 -t 0.05 op
+		case "$op" in
+			'[')
+				read -N 1 -t 0.05 op
+				case "$op" in
+					A) echo InvMU ;;
+					B) echo InvMD ;;
+					D) echo InvML ;;
+					C) echo InvMR ;;
+				esac ;;
+			'')
+				echo InvCLC ;;
 		esac
 	}
 }

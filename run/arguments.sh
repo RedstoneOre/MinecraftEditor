@@ -56,6 +56,8 @@
 										ArgResult['task']=help;;
 									--language|--lang)
 										stat=lang statp=;;
+									--show-log-on-exit)
+										ArgResult['show log on exit']=;;
 									*)
 										ArgResult['err']='Illegal option: '"$i"
 										return 1 ;;

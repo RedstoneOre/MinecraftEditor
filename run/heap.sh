@@ -43,7 +43,7 @@
     unset "$h" "${h}_size" "${h}_idx"
   }
 
-  _heap_swap() {
+  _swap() {
     local h=$1 i=$2 j=$3
     declare -n _heap="$h"
     declare -n _heap_idx="${h}_idx"
@@ -61,10 +61,8 @@
       local parent=$(((idx-1)/2))
       pos_cmp "${_heap[idx]}" "${_heap[parent]}"
       if (( $? == 0 )); then
-        _heap_swap "$h" "$idx" "$parent"
+        _swap "$h" "$idx" "$parent"
         idx=$parent
-	unset _heap_new_idx
-	_heap_new_idx=$idx
       else
         break
       fi
@@ -91,9 +89,8 @@
       fi
 
       if (( smallest != idx )); then
-        _heap_swap "$h" "$idx" "$smallest"
-	unset _heap_new_idx
-        _heap_new_idx=$smallest
+        _swap "$h" "$idx" "$smallest"
+        idx=$smallest
       else
         break
       fi
@@ -161,7 +158,7 @@
     return 0
   }
 
-  # heap_delete_idx <idx>
+  # heap_delete_idx <name>
   #  delete by index
   heap_delete_idx() {
     local h=$1 idx=$2
@@ -178,18 +175,17 @@
     unset '_heap[_sz-1]'
     ((_sz--))
     _heapify_down "$h" "$idx"
-    _heapify_up   "$h" "$_heap_new_idx"
+    _heapify_up   "$h" "$idx"
     return 0
   }
 
-  # heap_delete_val <value>
+  # heap_delete_idx <name>
   #  delete by value
   heap_delete_val() {
     local h=$1 idx=$2
     declare -n _heap="$h"
     declare -n _heap_idx="${h}_idx"
     [  -v _heap_idx[$idx] ] || return 1
-    echo heap_delete_idx $h "${_heap_idx[$idx]}" >&2
     heap_delete_idx $h "${_heap_idx[$idx]}"
     return $?
   }
