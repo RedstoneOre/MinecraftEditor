@@ -7,13 +7,15 @@ jq --version 2>&1 >/dev/null || {
 	}
 	exit 1
 }
-unset	MCEDITOR_INC_editor \
+unset	MCEDITOR_INC_editor	MCEDITOR_INC_world \
 	MCEDITOR_INC_input	MCEDITOR_INC_map		MCEDITOR_INC_hardness \
 	MCEDITOR_INC_print	MCEDITOR_INC_block		MCEDITOR_INC_enitity \
 	MCEDITOR_INC_espmap	MCEDITOR_INC_block_proportions	MCEDITOR_INC_block_piston \
 	MCEDITOR_INC_heap	MCEDITOR_INC_print_progress	MCEDITOR_INC_container \
-	MCEDITOR_INC_argument	MCEDITOR_INC_dimension		MCEDITOR_INC_fifo
+	MCEDITOR_INC_argument	MCEDITOR_INC_dimension		MCEDITOR_INC_fifo \
+	MCEDITOR_INC_print_window
 export dirp=`dirname "$0"`/run
+export dirlib=`dirname "$0"`/lib
 export dirlog=`dirname "$0"`/log
 export dirtmp=`dirname "$0"`/tmp
 export dirassets=`dirname "$0"`/assets

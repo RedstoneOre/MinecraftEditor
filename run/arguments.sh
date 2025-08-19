@@ -138,9 +138,9 @@
 		done
 		ArgResult["alldims"]=`ArgConnect "${dims[@]}"`
 		[ "${ArgResult[task]}" == main ] && {
-		       	[ -z "${ArgResult[page]}" ] && {
+			[ -z "${ArgResult[page]}" ] &&{
 				ArgResult[page]=create_world
-				[ -z "${ArgResult["alldims"]}" ] && ArgResult[page]=menu
+				[ -z "${ArgResult[alldims]}" ] && ArgResult[page]=menu
 			}
 		}
 		[ "$stat" != generic ] && {

@@ -123,7 +123,6 @@
 		[ "$sel" != "$lsel" ] && {
 			_invdispcache[sel]='' _invdispcache[lsel]=''
 		}
-		echo -n $'\e[K'
 		local i= from="${3:-0}" to="${4:-$_invsize}"
 		for((i=from;i<to;++i));do
 			local idxf=$((i-from))
