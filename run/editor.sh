@@ -97,6 +97,7 @@
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 1` 2 1 0
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 63` 2 2 0
 		}
+		CreateEntity $ENTITY_ITEM `GetItemEntityData 'The Illegal Item' 1` -20 -20 0
 
 		local power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0 invopen=0 linvopen=0 linvselected=
 		unset invselected; invselected=

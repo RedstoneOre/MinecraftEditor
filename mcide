@@ -1,5 +1,5 @@
 #! /bin/bash
-which jq 2>&1 >/dev/null || {
+jq --version 2>&1 >/dev/null || {
 	echo 'This project depends on jq from snap/deb jq'
 	read -r -p 'Do you want to install?(y)' insjq
 	[[ "$insjq" == [yY] ]] && {

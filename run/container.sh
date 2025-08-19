@@ -115,6 +115,10 @@
 		declare -n _invsize="${1}size"
 		declare -n _invdispcache="${1}dispcache"
 		local warp="${2:-9}"
+		local msgs=() width=() lens=() i=
+		for((i=0;i<warp;++i));do
+			width[i]=7
+		done
 		local sel="${5:-$selhotbar}" lsel="${6:-$sel}"
 		[ "$sel" != "$lsel" ] && {
 			_invdispcache[sel]='' _invdispcache[lsel]=''
@@ -122,26 +126,44 @@
 		echo -n $'\e[K'
 		local i= from="${3:-0}" to="${4:-$_invsize}"
 		for((i=from;i<to;++i));do
-			[ "$(((i-from)%warp))" == 0 ] && ((i!=from)) && echo -n $'\n\e[K'
+			local idxf=$((i-from))
 			[ "${_invdispcache[i]}" == '' ] && {
 				{ # Just DescribeItem but it's so slow to call the func
 					local sinvtgitem="$(
-						dscItem="${_inv[i]:-NDC}" dscCnt="${_invc[i]}"  dscTag=` [ "$sel" == "$i" ] && { echo -n E;true; } || echo -n e `
+						dscItem="${_inv[i]:-NDC}" dscCnt="${_invc[i]}"  dscTag=` [ "$sel" == "$i" ] && { echo -n E;true; } || echo -n e ` dscLength=0
 						[ "$dscCnt" -lt 1 ] && {
 							PrintChar "$dscItem" "$dscTag" "$defaultstyle"
-							echo -n Nothing
+							echo -n 'Nothing'
+							((dscLength+=7))
 							true
 						} || {
-							[ "$dscCnt" -gt 1 ] && echo -n "$dscCnt * "
+							[ "$dscCnt" -gt 1 ] && {
+						       		echo -n "$dscCnt * "
+								((dscLength+=${#dscCnt}+3))
+							}
 							[ "$dscItem" == ' ' ] && dscItem='VSP'
 							PrintChar "$dscItem" "$dscTag" "$defaultstyle"
+							((++dscLength))
 						}
+						echo -n ';'"$dscLength"
 					)"
 				}
 				_invdispcache[i]="$sinvtgitem"
 			}
-			echo -n "${_invdispcache[i]}"
-			echo -n $'\t\e[0m'
+			local len=${_invdispcache[i]##*;}
+			local inwarpp=$((idxf%warp))
+			[ "$len" -gt "${width[inwarpp]}" ] && {
+				width[inwarpp]=$len
+			}
+			msgs[idxf]="${_invdispcache[i]%;*}"
+			lens[idxf]=$len
+		done
+		local i= j=
+		for((i=from;i<to;++i));do
+			[ "$(((i-from)%warp))" == 0 ] && ((i!=from)) && echo
+			local inwarpp=$(((i-from)%warp)) idxf=$((i-from))
+			echo -n "${msgs[idxf]}"$'\e[0m'
+			for((j=width[inwarpp];j>=lens[idxf];--j));do echo -n ' ';done
 		done
 	}
 
