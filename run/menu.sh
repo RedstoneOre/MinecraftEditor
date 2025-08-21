@@ -17,7 +17,7 @@
 		local stline=$(((winY-iconsize)/2))
 		echo -n $'\ec\e'"[${stline}H$icon"
 		echo $'\e'"[$((stline+3));$((iconsize*2+6))H"'Minecraft IDE'
-		echo $'\e'"[$((stline+3));$((iconsize*2+2))H"$'-- A simple and \e[9mannoy\e[0;8minterest\e[0ming editor'
+		echo $'\e'"[$((stline+4));$((iconsize*2+10))H"$'-- A simple and \e[9mannoy\e[0;4minterest\e[0ming editor'
 		read -r -N 1
 		echo -n $'\ec'
 	}

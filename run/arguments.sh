@@ -2,16 +2,11 @@
 [ -v MCEDITOR_INC_arguments ] || {
 	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'Argument parsing loaded'
 	MCEDITOR_INC_arguments=
+	. "$dirp"/base/check.sh
 	unset ArgResult
 	# ReadArgument <args>...
 	#  return map ArgResult as the parse result
 	#  return false if the argument is illegal, set ArgResult[err] as the error message
-	function IsNumber {
-		[[ "$1" =~ ^-?[0-9]+$ ]]
-	}
-	function IsIdName {
-		[ -n "$1" ] && ! [[ "$1" =~ [^0-9a-zA-Z_/.:] ]]
-	}
 	function CheckShortOption {
 		[ "$1" != generic ] && {
 			ArgResult['err']='Multiple sub-args-required options in one short option: '"$2"

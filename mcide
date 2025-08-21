@@ -1,4 +1,14 @@
 #! /bin/bash
+[ -v BASH ] || {
+	echo Please run this project on bash!
+	exit 1
+}
+[ "${BASH_VERSINFO:-0}" -lt 5 ] && ! [ -v MCEDITOR_ignore_bash_version ] && {
+	echo "The bash version needs to be 5+(currect $BASH_VERSION)"
+	echo To ignore this, set MCEDITOR_ignore_bash_version
+	echo WARN: this may cause CRITICAL PROBLEMS even destroy ur file!
+	exit 1
+}
 jq --version 2>&1 >/dev/null || {
 	echo 'This project depends on jq from snap/deb jq'
 	read -r -p 'Do you want to install?(y)' insjq

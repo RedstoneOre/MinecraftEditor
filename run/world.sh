@@ -39,7 +39,7 @@
 			NewDimension "$i" "$efile"
 			local did=`GetDimensionID "$i"`
 			local filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
-			Read_File "$did" "$filesize" < <(<"$efile") 6> >(ShowProgressBar "Reading $i from $efile[" ']' 50)
+			Read_File "$did" "$filesize" <"$efile" 6> >(ShowProgressBar "Reading $i from $efile[" ']' 50)
 			[ "$MCEDITOR_dbgl" -gt 1 ] && {
 				echo "Load dimension: $i(ID: $did) from $efile"
 				heap_print "fcm$did"
