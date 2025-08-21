@@ -1,24 +1,24 @@
 \e[0;1mUsage\e[0m:
 	Launch editor:
 		mcide [options...] FILES...
-	(\e[31mNOT AVALIBLE NOW\e[0m) Get help:
-		mcide [-h|--help]
+	Get help:
+		mcide <-h|--help> [<--lang|--language|-l> lang:LANG]
 \e[1mOptions:\e[0m
 	\e[4mOptions with \e[31mred\e[0;4m color IS NOT AVAILBLE now\e[0m
 	\e[4mOptions with \e[33myellow\e[0;4m color HAVE NO EFFECT now\e[0m
 		\e[33m--dir dir:PATH		use $dir as the game dir\e[0m
-		\e[33m--menu, -m		show game menu(task=menu)\e[0m
-		\e[31m--create-world		create a new world(task=create_world)\e[0m
+		\e[33m--menu, -m		show game menu(page=menu)\e[0m
+		\e[31m--create-world		create a new world(page=create_world)\e[0m
 		\e[31m--load-world file:PATH,	load a world\e[0m
 		\e[37m|\e[0m \e[31m--open-world file:PATH,\e[0m
 		\e[37m|\e[0m \e[31m-w file:PATH\e[0m
 		\e[33m--language lang:LANG	set the language
 		\e[37m|\e[0m \e[33m--lang lang:LANG, -l lang:LANG\e[0m
-	* If any dimnesion is defined in the arguments, the default task
+	* If any dimnesion is defined in the arguments, the default page
 	*  will be setted to `create_world`, otherwise it will be setted
 	*  to `menu`(still do `create_world` thing now).
-	\e[1m For `menu` task: \e[0m
-	\e[1m For `create_world` task: \e[0m
+	\e[1m For `menu` page: \e[0m
+	\e[1m For `create_world` page: \e[0m
 		--dim dimid:DID file:PATH	read a dimension from a file, \e[31mleave $dimid '-' to auto set\e[0m
 		\e[37m|\e[0m --dimension dimid:DID file:PATH,
 		\e[37m|\e[0m -d dimid:DID file:PATH

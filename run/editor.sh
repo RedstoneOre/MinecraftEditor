@@ -15,25 +15,33 @@
 		end=0
 		IFS=''
 		trap 'end=1' SIGINT
-		ltty=`stty -g`
-		stty -echo icanon
 		ReadArguments "$@" || {
-			echo "${ArgResult['err']}"
+			echo "${ArgResult[err]}"
+			editorrecover
 			return 1
 		}
-		[ "$MCEDITOR_dbgl" -gt 1 ] && {
-			set | grep -w '^ArgResult'
-		}
-		unset showlogonexit
-		[ -v ArgResult['show log on exit'] ]; showlogonexit=$[1-$?]
-		
-		case "${ArgResult[page]}" in
-			menu)
-				menumain;;
-			create_world)
-				worldmain ;;
+		case "${ArgResult[task]}" in
+			main)
+				ltty=`stty -g`
+				stty -echo icanon
+				lang="${ArgResult[lang]}"
+				[ "$MCEDITOR_dbgl" -gt 1 ] && {
+					set | grep -w '^ArgResult'
+				}
+				unset showlogonexit
+				[ -v ArgResult['show log on exit'] ]; showlogonexit=$[1-$?]
+				
+				case "${ArgResult[page]}" in
+					menu)
+						menumain;;
+					create_world)
+						worldmain ;;
+				esac
+				editorrecover
+				[ "$showlogonexit" == 1 ] && vim "$logfile" ;;
+			help)
+				lang="${ArgResult[lang]}"
+				echo -e "`< "$dirassets"/mcide/help/"$lang".txt`" ;;
 		esac
-		editorrecover
-		[ "$showlogonexit" == 1 ] && vim "$logfile"
 	}
 }
