@@ -14,6 +14,11 @@
 } && {
 	echo "Loaded successfully"
 	export dirp=`realpath .`/run
+	export dirlib=`realpath .`/lib
+	export dirlog=`realpath .`/log
+	export dirtmp=`realpath .`/tmp
+	export dirassets=`realpath .`/assets
+	mkdir -p "$dirlog" "$dirtmp"
 	export MCEDITOR_dbgl=${1-2}
 	export lastopmodule=editor
 	function loadmodule {

@@ -28,9 +28,9 @@
 		echo -n $'\e'"[$((stline+6));$((iconsize*2+6))H"
 		add_option menu worlds fixed 'Singelplayer' '' button
 		echo -n $'\e'"[$((stline+8));$((iconsize*2+6))H"
-		add_option menu servers fixed 'Multiplayer ' '' button
+		add_option menu servers fixed 'Multiplayer' '' button
 		echo -n $'\e'"[$((stline+10));$((iconsize*2+6))H"
-		add_option menu leave fixed 'Leave Game  ' '' button
+		add_option menu leave fixed 'Quit Editor' '' button
 		show_all_options menu
 		while :;do
 			local op= opsel=0

@@ -7,5 +7,6 @@
 	mkfifo "$tmpfifo"
 	exec 11<> "$tmpfifo" # block/progress	ProgressBar
 	exec 12<> "$tmpfifo" # input		InputThread
+	# exec 13<> "$tmpfifo" # input		MixedStdin
 	rm "$tmpfifo"
 }

@@ -25,6 +25,7 @@
 				ltty=`stty -g`
 				stty -echo icanon
 				lang="${ArgResult[lang]}"
+				echo -n $'\e[0m\e[?25l'
 				[ "$MCEDITOR_dbgl" -gt 1 ] && {
 					set | grep -w '^ArgResult'
 				}

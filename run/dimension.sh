@@ -15,6 +15,8 @@
 		dim2num[d"$1"]=$newid
 		num2dim[$newid]="$1"
 		dimfile[$newid]="$2"
+		# create map
+		declare -g -A "fc$newid=()"
 		# create heap
 		heap_init fcm$newid
 	}
@@ -24,7 +26,7 @@
 		# (Not Completed qwq)
 		# Delete dimension data
 		local did="${dim2num[d"$1"]}"
-		unset dim2num[d"$1"] num2dim[$did] dimfile[$did]
+		unset dim2num[d"$1"] num2dim[$did] dimfile[$did] fc$did
 		heap_delete fcm$newid
 	}
 	# GetDimensionID <name>

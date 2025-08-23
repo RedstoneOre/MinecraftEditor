@@ -9,7 +9,7 @@
 	CharPrc['PLY']='@'
 	CharStyle['BOL']='2'
 	CharPrc['BOL']='|'
-	CharStyle['OOT']='0'
+	CharStyle['OOT']='3'
 	CharPrc['OOT']='#'
 	CharStyle['SOT']='2'
 	CharPrc['SOT']='['
