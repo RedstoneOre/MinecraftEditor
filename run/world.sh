@@ -70,7 +70,7 @@
 			done
 			read
 		}
-		px=0 py=0 vx=10 vy=5
+		px=0 py=0 vx=50 vy=15
 		InvInit inv 46
 
 		[ "$MCEDITOR_dbgl" -ge 2 ] && {

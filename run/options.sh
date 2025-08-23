@@ -1,4 +1,3 @@
-
 #! /bin/bash
 [ -v MCEDITOR_INC_options ] || {
 	[ "$MCEDITOR_dbgl" -ge 2 ] && echo 'options loaded'
@@ -21,11 +20,15 @@
 		declare -g -A "${d}_type=()"
 		declare -g -A "${d}_stat=()"
 		declare -g -A "${d}_data=()"
-		declare -g -A "$d=( focus '' )"
+		declare -g -A "$d=()"
 	}
-	# add_option <listname> <id> [textprovider:fixed] <text> <pos> [type:button]
+	# add_option <listname> <id> [textprovider:fixed] <text> [pos:(currect, req see /print/window.sh:16 )] [type:button]
 	function add_option {
 		local d=$1 id=$2 textp=${3:-fixed} text=$4 pos=$5 type=${6:-button}
+		[ "$pos" ] || {
+			getCursorPos
+			pos="$curY;$curX"
+		}
 		declare -n "_o_text=${d}_text"
 		declare -n "_o_textp=${d}_textp"
 		declare -n "_o_pos=${d}_pos"
@@ -41,7 +44,7 @@
 		_o_stat["$id"]=default
 		_o_data["$id"]=
 	}
-	# uodate_option <listname> <id>
+	# update_option <listname> <id>
 	function update_option {
 		local d=$1 id=$2
 		declare -n "_o_text=${d}_text"
@@ -56,16 +59,16 @@
 			default)
 				echo -n "$text" ;;
 			focus)
-				echo -n $'\e[7m'"$test"$'\e[0m' ;;
+				echo -n $'\e[7m'"$text"$'\e[0m' ;;
 		esac
 	}
-	# uodate_option <listname>
+	# show_all_options <listname>
 	function show_all_options {
 		local d=$1
 		declare -n "_o_type=${d}_type"
 		local i=
 		for i in "${!_o_type[@]}"; do
-			uodate_option "$d" "$i"
+			update_option "$d" "$i"
 		done	
 	}
 	# change_option_focus <listname> <id>
@@ -75,15 +78,14 @@
 		declare -n "_o_stat=${d}_stat"
 		local lfocus="${_o[focus]}"
 		[ -n "$lfocus" ] && {
-			_o_stat["$tfocus"]=default
-			update_option "$lfocus"
+			_o_stat["$lfocus"]=default
+			update_option "$d" "$lfocus"
 		}
 		_o[focus]="$id"
 		local tfocus="$id"
 		[ -n "$tfocus" ] && {
-		echo focusing "$tfocus"
 			_o_stat["$tfocus"]=focus
-			update_option "$tfocus"
+			update_option "$d" "$tfocus"
 		}
 	}
 }

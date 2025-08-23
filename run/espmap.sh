@@ -144,7 +144,7 @@
 			return
 		}
 		case "$mceec" in
-			$'\t') tfcres=( SOT POT POT POT POT POT POT EOT ) ;;
+			$'\t') tfcres=( SOT ' ' ' ' ' ' ' ' ' ' ' ' EOT ) ;;
 			*) tfcres=( "$mceec" ) ;;
 		esac
 	}
