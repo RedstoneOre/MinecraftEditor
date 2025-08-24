@@ -26,7 +26,7 @@
 	CharStyle['ERB']='2'
 	CharPrc['ERB']='>'
 	CharStyle['VSP']='4'
-	CharPrc['VSP']='.'
+	CharPrc['VSP']='␣'
 	CharStyle['NDC']='9'
 	CharPrc['NDC']=''
 	CharStyle['default']='9'

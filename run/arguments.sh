@@ -44,9 +44,14 @@
 										ArgResult['page']=menu ;;
 									--open-world|--load-world)
 										ArgResult['page']=load_world
-										stat=load_world statp=;;
+										stat=set_world_name statp=
+										;;
 									--dir)
 										stat=set_editor_dir statp=;;
+									--world-name)
+										stat=set_world_name statp=;;
+									--no-simple-mode-prompt)
+										ArgResult[no simple mode prompt]=awa;;
 									--help)
 										ArgResult['task']=help;;
 									--language|--lang)
@@ -60,7 +65,7 @@
 								true
 							} || { # is short option
 								local aval=mwodhl
-								[[ "${i:1}" =~ [^mwodhl] ]] && {
+								[[ "${i:1}" =~ [^mwodhln] ]] && {
 									ArgResult['err']='Illegal option: '"-${i//[-mwodhl]/} in $i"
 									return 1
 								}
@@ -68,8 +73,8 @@
 									ArgResult['page']=menu
 								[[ "$i" =~ w ]] && {
 									CheckShortOption "$stat" "$i" w || return 1
-									ArgResult['page']=world
-									stat=load_world statp=
+									ArgResult['page']=load_world
+									stat=set_world_name statp=
 								}
 								[[ "$i" =~ o ]] && {
 									CheckShortOption "$stat" "$i" o || return 1
@@ -85,6 +90,10 @@
 								[[ "$i" =~ l ]] && {
 									CheckShortOption "$stat" "$i" l || return 1
 									stat=lang statp=
+								}
+								[[ "$i" =~ n ]] && {
+									CheckShortOption "$stat" "$i" n || return 1
+									stat=set_world_name statp=
 								}
 							}
 							true
@@ -111,6 +120,14 @@
 					set_editor_dir)
 						ArgResult['dir']="$i"
 						stat=generic statp= ;;
+					set_world_name)
+						IsFileName "$i" || {
+							ArgResult['err']='Illegal world name(must be a file name): '"$i"
+							return 1
+						}
+						ArgResult['world name']="$i"
+						stat=generic statp=
+						;;
 					lang)
 						ArgResult['lang']="$i"
 						stat=generic statp= ;;

@@ -74,7 +74,7 @@
 				progupdcd=10;
 			}
 			charp=`heap_gettop fcmsave`
-			char=`getChar ${charp//.*/} ${charp//*./}`
+			char="`getChar ${charp//.*/} ${charp//*./}`"
 			heap_pop fcmsave
 			tcsize=`heap_getsize fcmsave`
 			case "$espst" in

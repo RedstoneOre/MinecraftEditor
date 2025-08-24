@@ -12,8 +12,10 @@
 	. "$dirp"/entity.sh
 	. "$dirp"/container.sh
 	. "$dirp"/file.sh
+	. "$dirp"/save.sh
 	. "$dirp"/dimension.sh
 	. "$dirp"/fifo.sh
+	# worldmain <worldname> [create|simple|load]
 	function worldmain {
 		# Special Chars
 		#  PLY - Coder
@@ -32,26 +34,75 @@
 		unset showlogonexit
 		[ -v ArgResult['show log on exit'] ]; showlogonexit=$[1-$?]
 
-		eval local dims=(${ArgResult['alldims']})
-		local efile=
-		for i in "${dims[@]}";do
-			efile="${ArgResult["dim$i"]}"
-			NewDimension "$i" "$efile"
-			local did=`GetDimensionID "$i"`
-			local filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
-			Read_File "$did" "$filesize" <"$efile" 6> >(ShowProgressBar "Reading $i from $efile[" ']' 50)
-			[ "$MCEDITOR_dbgl" -gt 1 ] && {
-				echo "Load dimension: $i(ID: $did) from $efile"
-				heap_print "fcm$did"
+		local worldname=$1
+		local createmode=${2:-load}
+		local worlddir="$dirgame/saves/$worldname"
+		[ "$createmode" == create ] && [ "$worldname" == '' ] && {
+			createmode=simple
+		}
+		[ "$createmode" == simple ] && [ -z "${ArgResult[no simple mode prompt]}" ] && {
+			echo $'\e[31mWARN: You are now in simple mode, it means ur world will be lost after u exit the editor.\e[0m'
+			echo $'\e[31mTo prevent this, use -n|--world-name <name> option to set the world name\e[0m'
+			echo $'\e[31mIf you want to ignore this prompt, add --no-simple-mode-prompt\e[0m'
+			echo $'\e[31mIf you want to continue, press Enter\e[0m'
+			echo $'\e[31mIf you want to leave, press ^C Enter\e[0m'
+			read -N 1
+		}
+		[ "$createmode" == create ] && [ -e "$worlddir" ] && {
+			echo $'\e[31mWARN: You are trying to override a exist world.\e[0m'
+			echo $'\e[31mTo open the world, use `-w|--open-world|--load-world <name>`\e[0m'
+			echo $'\e[31mTo override the world, delete the original one manually.\e[0m'
+			read -N 1
+			return 1
+		}
+		[ "$end" == 1 ] && {
+			return 1
+		}
+		[ "$MCEDITOR_dbgl" -ge 1 ] && {
+			echo "World name: $worldname"
+			echo "World dir: $worlddir"
+			echo "Create mode: $createmode"
+		}
+		[ "$createmode" == load ] && {
+			[ ! -d "$worlddir" ] && {
+				echo 'World does not exist'
+				return 1
 			}
-		done
+			[ ! -f "$worlddir"/level.json ] && {
+				echo 'World is invalid (level.json not found)'
+				return 1
+			}
+		}
+		[ "$createmode" != load ] && {
+			eval local dims=(${ArgResult['alldims']})
+			local efile=
+			for i in "${dims[@]}";do
+				efile="${ArgResult["dim$i"]}"
+				NewDimension "$i" "$efile"
+				local did=`GetDimensionID "$i"`
+				local filesize=`wc -m "$efile" | { read -d ' ' -r l;echo -n $l ; }`
+				Read_File "$did" "$filesize" <"$efile" 6> >(ShowProgressBar "Reading $i from $efile[" ']' 50)
+				[ "$MCEDITOR_dbgl" -gt 1 ] && {
+					echo "Load dimension: $i(ID: $did) from $efile"
+					heap_print "fcm$did"
+				}
+			done
+			[ "$MCEDITOR_dbgl" -gt 1 ] && {
+				set | grep -Ew '^(num2dim|dim2num)'
+				echo "Target Dimension: $dim"
+				read
+			}
+			InvInit inv 46
+			px=0 py=0
+			true
+		} || {
+			load_save "$worlddir" || {
+				echo 'Error loading world' >&2
+				return 1
+			}
+		}
 		GetDimensionID mcide:overworld >/dev/null || NewDimension mcide:overworld
 		dim=`GetDimensionID mcide:overworld`
-		[ "$MCEDITOR_dbgl" -gt 1 ] && {
-			set | grep -Ew '^(num2dim|dim2num)'
-			echo "Target Dimension: $dim"
-			read
-		}
 		[ "$end" == 1 ] && {
 			return
 		}
@@ -70,8 +121,7 @@
 			done
 			read
 		}
-		px=0 py=0 vx=10 vy=5
-		InvInit inv 46
+		vx=10 vy=5
 
 		[ "$MCEDITOR_dbgl" -ge 2 ] && {
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
@@ -222,8 +272,8 @@
 		echo -n $'\ec\e[?25l'
 		local i=
 		for i in "${num2dim[@]}";do
+			local efile="${dimfile["`GetDimensionID "$i"`"]}"
 			{
-				local efile="${dimfile["`GetDimensionID "$i"`"]}"
 				echo t'Backing up original file' >&6
 				echo p0 >&6
 				cp -- "$efile" "$efile".meditor.backup
@@ -232,6 +282,10 @@
 			} 6> >(ShowProgressBar "Saving $i to $efile [" ']' 50 >&2 )
 		done 2>&1
 		echo 'File saved'
+		[ "$createmode" != simple ] && {
+			echo '(test) Saving save...'
+			save_save "$worlddir" && echo 'Save saved' || echo 'Save save failed'
+		}
 		echo 'Endding process...'
 		echo 'E' >&12
 		[ "$MCEDITOR_dbgl" -ge 1 ] && {

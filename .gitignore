@@ -2,4 +2,4 @@ a.txt
 *.mceditor.backup
 *.swp
 log
-log/*
+saves

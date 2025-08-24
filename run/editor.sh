@@ -20,11 +20,14 @@
 			editorrecover
 			return 1
 		}
+		[ "${ArgResult[dir]}" ] &&
+			dirgame="${ArgResult['dir']%/}" # remove trailing /
 		case "${ArgResult[task]}" in
 			main)
 				ltty=`stty -g`
 				stty -echo icanon
 				lang="${ArgResult[lang]}"
+
 				echo -n $'\e[0m\e[?25l'
 				[ "$MCEDITOR_dbgl" -gt 1 ] && {
 					set | grep -w '^ArgResult'
@@ -36,7 +39,9 @@
 					menu)
 						menumain;;
 					create_world)
-						worldmain ;;
+						worldmain "${ArgResult[world name]}" create ;;
+					load_world)
+						worldmain "${ArgResult[world name]}" ;;
 				esac
 				editorrecover
 				[ "$showlogonexit" == 1 ] && vim "$logfile" ;;
