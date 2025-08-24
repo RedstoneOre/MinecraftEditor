@@ -5,7 +5,6 @@
 
 # Minecraft IDE
 ### Edit files just like playing minecraft
-\(Cannot save as a save yet\)
 
 ## Installation
 This project can only be runned on Linux
@@ -56,13 +55,14 @@ a extended piston, interact with the `#` to contract
 
 ## Progress
 
-- [ ] File Operations
+- [x] File Operations
 - - [x] Basic file reading (char 0~127 now)
 - - [x] Multiple file reading
 - - [x] File Saving
 - - [x] Multiple file saving
-- - [ ] Save Reading
-- - [ ] Save Saving
+- - [x] Save Reading
+- - [x] Save Saving
+- - - [ ] Entities Saving
 - [x] Arguments Reading
 - - [x] Editor
 - - [ ] Simple Mode
@@ -78,6 +78,7 @@ a extended piston, interact with the `#` to contract
 - - - [ ] Battary Type
 - - - [x] Creating & Deleting
 - - - [ ] Entity Moving
+- - [ ] Crafting
 - - [ ] Inventory
 - - - [x] Support
 - - - [x] Displaying
