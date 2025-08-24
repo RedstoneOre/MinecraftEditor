@@ -18,7 +18,7 @@ git clone https://github.com/RedstoneOre/MinecraftIDE.git
 cd MinecraftIDE
 ./mcide <file>
 ```
-See [arguments](docs/arguments/en_US.txt) for argument usage details
+See [arguments](docs/arguments/en-US.txt) for argument usage details
 
 ## Operation
 
