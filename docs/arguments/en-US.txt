@@ -16,7 +16,7 @@
 		\e[37m|\e[0m \e[33m--lang lang:LANG, -l lang:LANG\e[0m
 	* If any dimnesion is defined in the arguments, the default page
 	*  will be setted to `create_world`, otherwise it will be setted
-	*  to `menu`(still do `create_world` thing now).
+	*  to `menu`.
 	\e[1m For `menu` page: \e[0m
 	\e[1m For `create_world` page: \e[0m
 		--dim dimid:DID file:PATH	read a dimension from a file, \e[31mleave $dimid '-' to auto set\e[0m
