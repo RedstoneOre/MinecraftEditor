@@ -5,6 +5,7 @@
 	. "$dirp"/arguments.sh
 	. "$dirp"/world.sh
 	. "$dirp"/menu.sh
+	. "$dirp"/world_list.sh
 	function editorrecover {
 		echo -n $'\e[0m'
 		[ "$MCEDITOR_dbgl" -ge 1 ] && echo 'Main Thread Ended'
@@ -34,15 +35,27 @@
 				}
 				unset showlogonexit
 				[ -v ArgResult['show log on exit'] ]; showlogonexit=$[1-$?]
-				
-				case "${ArgResult[page]}" in
-					menu)
-						menumain;;
-					create_world)
-						worldmain "${ArgResult[world name]}" create ;;
-					load_world)
-						worldmain "${ArgResult[world name]}" ;;
-				esac
+				editorpage="${ArgResult[page]}"
+				[ "$MCEDITOR_dbgl" -ge 1 ] && echo "Start page: $editorpage"
+				while :;do
+					_editorpage="$editorpage"
+					editorpage=menu
+					end=0
+					case "$_editorpage" in
+						menu)
+							menumain;;
+						create_world)
+							local worldname="${ArgResult['world name']}"
+							worldmain "$worldname" create ;;
+						load_world)
+							local worldname="${ArgResult['world name']}"
+							worldmain "$worldname" ;;
+						world_list)
+							worldlistmain ;;
+						exit)
+							break;;
+					esac
+				done
 				editorrecover
 				[ "$showlogonexit" == 1 ] && vim "$logfile" ;;
 			help)

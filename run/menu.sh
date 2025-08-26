@@ -46,7 +46,12 @@
 				esac
 			done
 			case "${optionsel[opsel]}" in
-				leave) break;;
+				worlds)
+					editorpage=world_list
+					break;;
+				leave)
+					editorpage=exit
+					break;;
 				*) echo "${optionsel[opsel]}";;
 			esac
 		done

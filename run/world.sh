@@ -47,12 +47,17 @@
 			echo $'\e[31mIf you want to continue, press Enter\e[0m'
 			echo $'\e[31mIf you want to leave, press ^C Enter\e[0m'
 			read -N 1
+			[ "$end" == 1 ] && {
+				editorpage=exit
+				return 1
+			}
 		}
 		[ "$createmode" == create ] && [ -e "$worlddir" ] && {
 			echo $'\e[31mWARN: You are trying to override a exist world.\e[0m'
 			echo $'\e[31mTo open the world, use `-w|--open-world|--load-world <name>`\e[0m'
 			echo $'\e[31mTo override the world, delete the original one manually.\e[0m'
 			read -N 1
+			editorpage=exit
 			return 1
 		}
 		[ "$end" == 1 ] && {
@@ -286,11 +291,21 @@
 			echo '(test) Saving save...'
 			save_save "$worlddir" && echo 'Save saved' || echo 'Save save failed'
 		}
+		{
+			for i in "${num2dim[@]}";do
+				DeleteDimension "$i"
+			done
+			ResetScreenShow
+			ScheduleScreenUpdate 0
+		}
 		echo 'Endding process...'
 		echo 'E' >&12
 		[ "$MCEDITOR_dbgl" -ge 1 ] && {
 			echo 'Waiting...'
 		}
 		wait
+		[ "$createmode" == simple ] && {
+			editorpage=exit
+		}
 	}
 }

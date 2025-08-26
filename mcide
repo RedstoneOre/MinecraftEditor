@@ -23,7 +23,7 @@ unset	MCEDITOR_INC_editor		MCEDITOR_INC_world \
 	MCEDITOR_INC_espmap		MCEDITOR_INC_block_proportions	MCEDITOR_INC_block_piston \
 	MCEDITOR_INC_heap		MCEDITOR_INC_print_progress	MCEDITOR_INC_container \
 	MCEDITOR_INC_argument		MCEDITOR_INC_dimension		MCEDITOR_INC_fifo \
-	MCEDITOR_INC_print_window	NCEDITOR_INC_save
+	MCEDITOR_INC_print_window	NCEDITOR_INC_save		MCEDITOR_INC_world_list
 export dirp=`dirname "$0"`/run
 export dirlib=`dirname "$0"`/lib
 export dirlog=`dirname "$0"`/log
