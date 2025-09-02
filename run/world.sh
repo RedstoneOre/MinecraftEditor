@@ -15,6 +15,8 @@
 	. "$dirp"/save.sh
 	. "$dirp"/dimension.sh
 	. "$dirp"/fifo.sh
+	. "$dirp"/base/check.sh
+	. "$dirp"/operate.sh
 	# worldmain <worldname> [create|simple|load]
 	function resetworlddata {
 		for i in "${num2dim[@]}";do
@@ -22,6 +24,7 @@
 		done
 		ResetScreenShow
 		ScheduleScreenUpdate 0
+		echo 'disconnect' >&12
 	}
 	function worldmain {
 		# Special Chars
@@ -146,7 +149,7 @@
 			done
 			read
 		}
-		vx=10 vy=5
+		vx="${ArgResult[vis width]:-10}" vy="${ArgResult[vis height]:-5}"
 
 		[ "$MCEDITOR_dbgl" -ge 2 ] && {
 			CreateEntity $ENTITY_ITEM `GetItemEntityData BOL 5` 1 0 0
@@ -158,14 +161,12 @@
 
 		local power=100 prignore=0 isdig=0 canceldrop=0 opsuc=0 invopen=0 linvopen=0 linvselected=
 		unset invselected; invselected=
-		. "$dirp"/operate.sh
 		tickc=0
 		local lttime="`date +%s%N`" tgnspt=500000000
 		while true;do
 			local tinvopen=$invopen
 			[ "$invopen" == 1 ] && {
 				echo -n $'\e[0;0H'
-				echo I >&12
 				[ "$end" == 1 ] && break
 				[ -z "$invselected" ] && {
 					invselected=$selhotbar
@@ -181,7 +182,7 @@
 				linvselected=$invselected
 				true
 			} || {
-				echo >&12
+				echo op >&12
 				[ "$end" == 1 ] && break
 				echo -n $'\e[0;0H'
 				[ "$linvopen" == 1 ] && {
@@ -262,16 +263,18 @@
 					ntdate="`date +%s%N`"
 				done
 				opsuc=0
-				echo '' >&12
-				while [ "$opsuc" == 0 ] && [ "$end" != 1 ];do
+				echo opend >&12
+				{
 					isdig=0 ismove=0
 					op=''
 					IFS=' '
-					read -a op <&4
+					#echo 'qwqwqwq'
+					read -a op -t 0.2 <&4
+					echo "ciallo~It's ${op[@]} meow~"$'\e[K' >&2
+					[ "$op" ] && Operate_"${op[@]}"
 					IFS=''
-					"Operate_${op[@]}"
-					[ "$opsuc" == 0 ] && echo $'\n' >&12
-				done
+					[ "`date +%s%N`" -gt "$ltdate" ] && opsuc=1
+				}
 				[ "$canceldrop" -gt 0 ] && {
 					canceldrop="$[canceldrop-1]"
 				} || {
@@ -297,9 +300,11 @@
 			} || {
 				op=''
 				IFS=' '
+				echo opinv >&12
 				read -a op <&4
 				IFS=''
 				"OperateInv_${op[@]}"
+				echo "cinvllo~It's ${op[@]} meow~"$'\e[K' >&2
 			}
 		done 4< <(InputThread)
 		echo -n $'\ec'
@@ -319,9 +324,8 @@
 			echo '(test) Saving save...'
 			save_save "$worlddir" && echo 'Save saved' || echo 'Save save failed'
 		}
+		echo 'Endding world...'
 		resetworlddata
-		echo 'Endding process...'
-		echo $'E' >&12
 		[ "$MCEDITOR_dbgl" -ge 1 ] && {
 			echo 'Waiting...'
 		}

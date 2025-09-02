@@ -57,10 +57,10 @@
 					break;;
 			esac
 		done
-		echo >&11
+		echo $'\n\n\n' >&11
 		#echo -n $'\e[G\e[K'
 	}
 	function WaitProgressBarEnd {
-		read -r -d $'\n' -u 11
+		read -r -N 1 -u 11
 	}
 }

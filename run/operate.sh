@@ -116,7 +116,7 @@
 	function OperateInv_InvLC {
 		InvSwap inv $invselected inv $PLAYERINV_CURSOR
 	}
-	function OperateInv_InvSwithHotbar {
+	function OperateInv_InvSwitchHotbar {
 		[ -n "${inv[$PLAYERINV_CURSOR]}" ] && {
 			InvSwap inv $PLAYERINV_CURSOR inv $1
 			true

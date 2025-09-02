@@ -58,6 +58,12 @@
 										stat=lang statp=;;
 									--show-log-on-exit)
 										ArgResult['show log on exit']=;;
+									--vision-size)
+										stat=set_vision_size statp=;;
+									--vision-size-x)
+										stat=set_vision_size statp=x;;
+									--vision-size-y)
+										stat=set_vision_size statp=y;;
 									*)
 										ArgResult['err']='Illegal option: '"$i"
 										return 1 ;;
@@ -65,8 +71,8 @@
 								true
 							} || { # is short option
 								local aval=mwodhl
-								[[ "${i:1}" =~ [^mwodhln] ]] && {
-									ArgResult['err']='Illegal option: '"-${i//[-mwodhl]/} in $i"
+								[[ "${i:1}" =~ [^mwodhlnxy] ]] && {
+									ArgResult['err']='Illegal option: '"-${i//[-mwodhlnxy]/} in $i"
 									return 1
 								}
 								[[ "$i" =~ m ]] &&
@@ -95,6 +101,14 @@
 									CheckShortOption "$stat" "$i" n || return 1
 									stat=set_world_name statp=
 								}
+								[[ "$i" =~ x ]] && {
+									CheckShortOption "$stat" "$i" x || return 1
+									stat=set_vision_size statp=x
+								}
+								[[ "$i" =~ y ]] && {
+									CheckShortOption "$stat" "$i" y || return 1
+									stat=set_vision_size statp=y
+								}
 							}
 							true
 						} || { # new string argument
@@ -114,7 +128,7 @@
 							stat=dim statp="$i"
 							true
 						} || {
-							ArgResult['err']='Illegal dimension id: '"$i"
+							ArgResult[err]='Illegal dimension id: '"$i"
 							return 1
 						} ;;
 					set_editor_dir)
@@ -122,11 +136,27 @@
 						stat=generic statp= ;;
 					set_world_name)
 						IsFileName "$i" || {
-							ArgResult['err']='Illegal world name(must be a file name): '"$i"
+							ArgResult[err]='Illegal world name(must be a file name): '"$i"
 							return 1
 						}
 						ArgResult['world name']="$i"
 						stat=generic statp=
+						;;
+					set_vision_size)
+						IsNumber "$i" && {
+							case "$statp" in
+								x) ArgResult[vis width]="$i"
+									stat=generic statp=;;
+								y) ArgResult[vis height]="$i"
+									stat=generic statp=;;
+								'') ArgResult[vis width]="$i"
+									stat=generic statp=y;;
+							esac
+							true
+						} || {
+							ArgResult[err]="Vision size $statp requires a number instead of $i"
+							return 1
+						}
 						;;
 					lang)
 						ArgResult['lang']="$i"
