@@ -36,7 +36,7 @@ Use 1~9 to select slot in hotbar / swap items with hotbar in the inventory
 
 Use \[ to dig, \] to place/interact
 
-Use ^C to interrupt
+Use q to leave
 
 ## Structures
 

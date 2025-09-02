@@ -61,7 +61,7 @@
 	}
 
 	function Operate_Nothing {
-		: # opsuc=1
+		opsuc=1
 	}
 	function Operate_SwitchHotbar {
 		lselhotbar="$selhotbar" selhotbar="$1"
@@ -126,5 +126,9 @@
 	}
 	function OperateInv_InvClose {
 		invopen=0
+	}
+	
+	function Operate_Leave {
+		opsuc=1 end=1
 	}
 }

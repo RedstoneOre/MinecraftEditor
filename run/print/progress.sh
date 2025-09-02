@@ -4,6 +4,7 @@
 	MCEDITOR_INC_print_progress=
 	. "$dirp"/fifo.sh
 	function ShowProgressBar {
+		trap '' SIGINT
 		local prefix="${1:-[}" surfix="${2:-]}" length="${3:-10}" chars="${4:-.#}" op=
 		local st="${#prefix}"
 		echo -n "$prefix"

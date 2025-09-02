@@ -6,7 +6,9 @@
 	. "$dirp"/operate.sh
 	. "$dirp"/fifo.sh
 	function InputThread {
-		while read inputop <&12;do
+		trap '' SIGINT
+		while :;do
+			read inputop <&12 || inputop=E
 			[ "$inputop" == E ] && {
 				echo 'Input Thrad Ended' >&2
 				break
@@ -22,12 +24,18 @@
 					\{) echo 'InvSLC' ;;
 					\}) echo 'InvSRC' ;;
 					[1-9]) echo 'InvSwithHotbar '"$[op-1]" ;;
-					e) echo 'InvClose' ;;
+					[eq]) echo 'InvClose' ;;
 					*) echo '' ;;
 				esac
 				true
 			} || {
-				read -N 1 op
+				op=
+				echo Start Reading OP>&2
+				while ! read -t 0.05 <&12;do
+					echo Reading OP "$op">&2
+					[ "$op" ] || read -N 1 -t 0.05 op
+				done
+				echo Operate OP "$op">&2
 				case "$op" in
 					w) echo 'MoveUpwards' ;;
 					a) echo 'MoveLeft' ;;
@@ -38,6 +46,7 @@
 					k) echo 'MoveFocusDownwards' ;;
 					l) echo 'MoveFocusRight' ;;
 					e) echo 'OpenInventory' ;;
+					q) echo 'Leave' ;;
 					']') echo 'UseBlock' ;;
 					' ') echo 'Jump' ;;
 					[1-9] ) echo 'SwitchHotbar '"$[op-1]";;

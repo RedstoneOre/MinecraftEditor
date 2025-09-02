@@ -15,7 +15,7 @@
 	function editormain {
 		end=0
 		IFS=''
-		trap 'end=1' SIGINT
+		trap '' SIGINT
 		ReadArguments "$@" || {
 			echo "${ArgResult[err]}"
 			editorrecover

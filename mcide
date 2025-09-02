@@ -35,6 +35,8 @@ MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mcide`
 [[ "$MCEDITOR_dbgl" != [0-9] ]] && MCEDITOR_dbgl=0
 {
 	logfile="$dirlog/`date '+%F/%T'`#$$.log"
+	rm "$dirlog"/latest.log
+	ln -s "$logfile" "$dirlog"/latest.log
 	mkdir -p "${logfile%/*}"
        	exec 2> "$logfile"
 }

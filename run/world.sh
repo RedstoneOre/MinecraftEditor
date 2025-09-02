@@ -16,6 +16,13 @@
 	. "$dirp"/dimension.sh
 	. "$dirp"/fifo.sh
 	# worldmain <worldname> [create|simple|load]
+	function resetworlddata {
+		for i in "${num2dim[@]}";do
+			DeleteDimension "$i"
+		done
+		ResetScreenShow
+		ScheduleScreenUpdate 0
+	}
 	function worldmain {
 		# Special Chars
 		#  PLY - Coder
@@ -45,9 +52,10 @@
 			echo $'\e[31mTo prevent this, use -n|--world-name <name> option to set the world name\e[0m'
 			echo $'\e[31mIf you want to ignore this prompt, add --no-simple-mode-prompt\e[0m'
 			echo $'\e[31mIf you want to continue, press Enter\e[0m'
-			echo $'\e[31mIf you want to leave, press ^C Enter\e[0m'
-			read -N 1
-			[ "$end" == 1 ] && {
+			echo $'\e[31mIf you want to leave, press any other key\e[0m'
+			local op=
+			read -N 1 op
+			[ "$op" != $'\n' ] && {
 				editorpage=exit
 				return 1
 			}
@@ -105,6 +113,19 @@
 				echo 'Error loading world' >&2
 				return 1
 			}
+			local i=
+			echo 'This save could modify these files:'
+			for i in "${dimfile[@]}";do
+				echo $'\t'"$i"
+			done
+			echo 'Press Other Keys to Leave'
+			echo 'Press Enter to Continue'
+			local op=
+			read -N 1 op
+			[ "$op" != $'\n' ] && {
+				resetworlddata
+				return 1
+			}
 		}
 		GetDimensionID mcide:overworld >/dev/null || NewDimension mcide:overworld
 		dim=`GetDimensionID mcide:overworld`
@@ -113,8 +134,7 @@
 		}
 
 		[ "$MCEDITOR_dbgl" -lt 2 ] && {
-			echo -n $'\e[0m\e[?25l'
-			clear
+			echo -n $'\e[0m\e[?25l\ec'
 		}
 		[ "$MCEDITOR_dbgl" -ge 3 ] && {
 			for((i=0;i<lines;++i));do
@@ -140,6 +160,7 @@
 		unset invselected; invselected=
 		. "$dirp"/operate.sh
 		tickc=0
+		local lttime="`date +%s%N`" tgnspt=500000000
 		while true;do
 			local tinvopen=$invopen
 			[ "$invopen" == 1 ] && {
@@ -234,7 +255,14 @@
 				done
 			}
 			[ "$tinvopen" != 1 ] && {
+				local ntdate="`date +%s%N`"
+				((ltdate+=tgnspt, ntdate>ltdate)) && ltdate="$((ntdate+tgnspt))"
+				while [ "$ntdate" -lt "$ltdate" ] ;do
+					sleep 0.02
+					ntdate="`date +%s%N`"
+				done
 				opsuc=0
+				echo '' >&12
 				while [ "$opsuc" == 0 ] && [ "$end" != 1 ];do
 					isdig=0 ismove=0
 					op=''
@@ -242,7 +270,7 @@
 					read -a op <&4
 					IFS=''
 					"Operate_${op[@]}"
-					[ "$opsuc" == 0 ] && echo >&12
+					[ "$opsuc" == 0 ] && echo $'\n' >&12
 				done
 				[ "$canceldrop" -gt 0 ] && {
 					canceldrop="$[canceldrop-1]"
@@ -274,7 +302,7 @@
 				"OperateInv_${op[@]}"
 			}
 		done 4< <(InputThread)
-		echo -n $'\ec\e[?25l'
+		echo -n $'\ec'
 		local i=
 		for i in "${num2dim[@]}";do
 			local efile="${dimfile["`GetDimensionID "$i"`"]}"
@@ -291,19 +319,14 @@
 			echo '(test) Saving save...'
 			save_save "$worlddir" && echo 'Save saved' || echo 'Save save failed'
 		}
-		{
-			for i in "${num2dim[@]}";do
-				DeleteDimension "$i"
-			done
-			ResetScreenShow
-			ScheduleScreenUpdate 0
-		}
+		resetworlddata
 		echo 'Endding process...'
-		echo 'E' >&12
+		echo $'E' >&12
 		[ "$MCEDITOR_dbgl" -ge 1 ] && {
 			echo 'Waiting...'
 		}
 		wait
+		echo -n $'\e[?25h'
 		[ "$createmode" == simple ] && {
 			editorpage=exit
 		}
