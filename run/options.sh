@@ -8,6 +8,14 @@
 	function TextProvider_fixed {
 		echo -n "$1"
 	}
+	function TextProvider_danger {
+		[ "$3" == focus ] && echo -n $'\e[101m'
+		echo -n "$1"
+		[ "$3" == focus ] && echo -n $'\e[0m'
+	}
+	function TextProvider_choice {
+		echo -n "$1$2"
+	}
 
 	# init_option_list <name>
 	#  Initialize an option list
@@ -60,6 +68,8 @@
 				echo -n "$text" ;;
 			focus)
 				echo -n $'\e[7m'"$text"$'\e[0m' ;;
+			highlighted)
+				echo -n $'\e[106;30m'"$text"$'\e[0m' ;;
 		esac
 	}
 	# show_all_options <listname>
@@ -87,5 +97,26 @@
 			_o_stat["$tfocus"]=focus
 			update_option "$d" "$tfocus"
 		}
+	}
+	# change_option_focus <listname> <id> <0|1>
+	function set_option_highlight {
+		local d=$1 id=$2 thl=$3
+		declare -n "_o=$d"
+		declare -n "_o_stat=${d}_stat"
+		[ "$thl" == 0 ] && {
+			[ "${_o_stat["$id"]}" == highlighted ] && {
+				_o_stat["$id"]=default
+				update_option "$d" "$id"
+				return 0
+			}
+			true
+		} || {
+			[ "${_o_stat["$id"]}" == default ] && {
+				_o_stat["$id"]=highlighted
+				update_option "$d" "$id"
+				return 0
+			}
+		}
+		return 1
 	}
 }

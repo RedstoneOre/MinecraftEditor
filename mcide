@@ -17,19 +17,25 @@ jq --version 2>&1 >/dev/null || {
 	}
 	exit 1
 }
-unset	MCEDITOR_INC_editor		MCEDITOR_INC_world \
+unset	MCEDITOR_INC_editor		MCEDITOR_INC_world		MCEDTIOR_INC_option_list \
 	MCEDITOR_INC_input		MCEDITOR_INC_map		MCEDITOR_INC_hardness \
 	MCEDITOR_INC_print		MCEDITOR_INC_block		MCEDITOR_INC_enitity \
 	MCEDITOR_INC_espmap		MCEDITOR_INC_block_proportions	MCEDITOR_INC_block_piston \
 	MCEDITOR_INC_heap		MCEDITOR_INC_print_progress	MCEDITOR_INC_container \
 	MCEDITOR_INC_argument		MCEDITOR_INC_dimension		MCEDITOR_INC_fifo \
 	MCEDITOR_INC_print_window	NCEDITOR_INC_save		MCEDITOR_INC_world_list
-export dirp=`dirname "$0"`/run
-export dirlib=`dirname "$0"`/lib
-export dirlog=`dirname "$0"`/log
-export dirtmp=`dirname "$0"`/tmp
-export dirassets=`dirname "$0"`/assets
-export dirgame=`dirname "$0"`
+ldir="`dirname "$0"`"
+[ "$ldir" ] || {
+	echo 'What happened I even cannot find the executable file awa'
+	sleep 3
+	exit 1
+}
+export dirp="$ldir"/run
+export dirlib="$ldir"/lib
+export dirlog="$ldir"/log
+export dirtmp="$ldir"/tmp
+export dirassets="$ldir"/assets
+export dirgame="$ldir"
 mkdir -p "$dirlog" "$dirtmp"
 MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mcide`
 [[ "$MCEDITOR_dbgl" != [0-9] ]] && MCEDITOR_dbgl=0
@@ -40,6 +46,7 @@ MCEDITOR_dbgl=`echo -n "$dbgl" | jq -crM .mcide`
 	mkdir -p "${logfile%/*}"
        	exec 2> "$logfile"
 }
+echo "Using tmp dictionary $dirtmp" >&2
 [ "$MCEDITOR_dbgl" -ge 2 ] && {
 	echo "Currect debug level: $MCEDITOR_dbgl"
 	sleep 0.3

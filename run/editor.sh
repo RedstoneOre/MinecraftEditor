@@ -6,6 +6,7 @@
 	. "$dirp"/world.sh
 	. "$dirp"/menu.sh
 	. "$dirp"/world_list.sh
+	. "$dirp"/option_list.sh
 	function editorrecover {
 		echo -n $'\e[0m'
 		[ "$MCEDITOR_dbgl" -ge 1 ] && echo 'Main Thread Ended'
@@ -52,6 +53,8 @@
 							worldmain "$worldname" ;;
 						world_list)
 							worldlistmain ;;
+						options)
+							option_list_main;;
 						exit)
 							break;;
 					esac

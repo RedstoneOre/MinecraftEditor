@@ -26,10 +26,12 @@
 		echo $'\e'"[$((stline+4));$((iconsize*2+10))H"$'-- A simple and \e[9mannoy\e[0;4minterest\e[0ming editor'
 		init_option_list menu
 		echo -n $'\e'"[$((stline+6));$((iconsize*2+6))H"
-		add_option menu worlds fixed 'Singelplayer' '' button
+		add_option menu worlds fixed 'Singleplayer' '' button
 		echo -n $'\e'"[$((stline+8));$((iconsize*2+6))H"
 		add_option menu servers fixed 'Multiplayer' '' button
 		echo -n $'\e'"[$((stline+10));$((iconsize*2+6))H"
+		add_option menu options fixed 'Options...' '' button
+		echo -n $'\e'"[$((stline+12));$((iconsize*2+6))H"
 		add_option menu leave fixed 'Quit Editor' '' button
 		show_all_options menu
 		while :;do
@@ -51,6 +53,9 @@
 					break;;
 				leave)
 					editorpage=exit
+					break;;
+				options)
+					editorpage=options
 					break;;
 				*) echo "${optionsel[opsel]}";;
 			esac
