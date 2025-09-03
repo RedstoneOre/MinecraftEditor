@@ -14,6 +14,11 @@
 		\e[37m|\e[0m -w file:PATH
 		\e[33m--language lang:LANG	set the language
 		\e[37m|\e[0m \e[33m--lang lang:LANG, -l lang:LANG\e[0m
+		--vision-size x:NUMBER y:NUMBER	Set the vision size(render distance)
+		--vision-size-x x:NUMBER	Set the vision width
+		\e[37m|\e[0m -x x:NUMBER
+		--vision-size-y y:NUMBER	Set the vision height
+		\e[37m|\e[0m -y y:NUMBER
 	* If any dimnesion is defined in the arguments, the default page
 	*  will be setted to `create_world`, otherwise it will be setted
 	*  to `menu`.

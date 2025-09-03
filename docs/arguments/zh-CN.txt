@@ -14,6 +14,11 @@
 		\e[37m|\e[0m -w file:PATH
 		\e[33m--language lang:LANG	设置语言
 		\e[37m|\e[0m \e[33m--lang lang:LANG, -l lang:LANG\e[0m
+		--vision-size x:NUMBER y:NUMBER 设置可视范围大小(渲染距离)
+		--vision-size-x x:NUMBER	设置可视范围宽度
+		\e[37m|\e[0m -x x:NUMBER
+		--vision-size-y y:NUMBER	设置可视范围高度
+		\e[37m|\e[0m -y y:NUMBER
 	* 如果任意维度在参数中被定义, 默认的任务将被设为`create_world`, 否则它
 	*  将被设为`menu`.
 	\e[1m对于`menu`任务: \e[0m

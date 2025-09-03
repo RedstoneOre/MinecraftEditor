@@ -65,8 +65,8 @@ a extended piston, interact with the `#` to contract
 - - - [ ] Entities Saving
 - [x] Arguments Reading
 - - [x] Editor
-- - [ ] Simple Mode
-- - [ ] Help
+- - [x] Simple Mode
+- - [x] Help
 - [ ] Editing
 - - [x] Map
 - - [x] Moving
