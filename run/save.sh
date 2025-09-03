@@ -20,7 +20,7 @@
 		echo "$tcsize $progupdcd" >&2
 		local efile="`realpath ${dimfile["$d"]}`"
 		{
-			echo "file $efile" >&4
+			echo "file ${dimfhash["$d"]} $efile" >&4
 			while [ "$tcsize" -gt 0 ]; do
 				charp=`heap_gettop fcmsave`
 				char="`getChar ${charp//.*/} ${charp//*./}`"
@@ -31,16 +31,17 @@
 			done
 		} 4> >(jq -RncaM '
 			reduce inputs as $line (
-				{file: "", map: {}}; 
+				{file: "", fhash: "", map: {}}; 
 				($line | split(" ")) as $parts
-				| if ($parts[0]) == "file" then
-						.file = ( $parts[1:] | join(" ") )
-					else
-						if ($parts | length) >= 3 then
-							.map[$parts[0]] //= {}
-							| .map[$parts[0]][$parts[1]] = ( $parts[2:] | join(" ") )
-						end
+				| if $parts[0] == "file" then
+					.fhash = $parts[1]
+					| .file = ( $parts[2:] | join(" ") )
+				else
+					if ($parts | length) >= 3 then
+						.map[$parts[0]] //= {}
+						| .map[$parts[0]][$parts[1]] = ( $parts[2:] | join(" ") )
 					end
+				end
 			)
 		' )
 		dim=$ldim
@@ -106,9 +107,11 @@
 		local charp= char= 
 		local progupdcd=0
 		{
-			local file=
+			local file= fhash=
 			read -u 4 -r file
+			read -u 4 -r fhash
 			dimfile["$d"]="$file"
+			dimfhash["$d"]="$fhash"
 			while read -u 4 -r line; do
 				{
 					read -d ' ' -r cx
@@ -117,7 +120,7 @@
 				} < <(echo "$line")
 				setChar "$cx" "$cy" "$char"
 			done
-		} 4< <(jq -r '.file, (.map | to_entries[] | .key as $outer | .value | to_entries[] | "\($outer) \(.key) \(.value)")' )
+		} 4< <(jq -r '.file, .fhash, (.map | to_entries[] | .key as $outer | .value | to_entries[] | "\($outer) \(.key) \(.value)")' )
 		echo end loading $dim >&2
 		dim=$ldim
 	}

@@ -4,9 +4,9 @@
 	MCEDITOR_INC_dimension=
 	. "$dirp"/map.sh
 	. "$dirp"/heap.sh
-	unset dim2num num2dim dimfile dimidcnt
+	unset dim2num num2dim dimfile dimfhash dimidcnt
 	declare -g -A dim2num=
-	num2dim=() dimfile=()
+	num2dim=() dimfile=() dimfhash=()
 	dimidcnt=0
 	# NewDimension <name> <file>
 	#  Register a new dimension
@@ -15,6 +15,7 @@
 		dim2num[d"$1"]=$newid
 		num2dim[$newid]="$1"
 		dimfile[$newid]="$2"
+		dimfhash[$newid]="$2"
 		# create map
 		declare -g -A "fc$newid=()"
 		# create heap
@@ -26,7 +27,7 @@
 		# (Not Completed qwq)
 		# Delete dimension data
 		local did="${dim2num[d"$1"]}"
-		unset dim2num[d"$1"] num2dim[$did] dimfile[$did] fc$did
+		unset dim2num[d"$1"] num2dim[$did] dimfile[$did] dimfhash[$did] fc$did
 		heap_delete fcm$newid
 	}
 	# GetDimensionID <name>

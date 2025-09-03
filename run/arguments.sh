@@ -150,7 +150,7 @@
 								y) ArgResult[vis height]="$i"
 									stat=generic statp=;;
 								'') ArgResult[vis width]="$i"
-									stat=generic statp=y;;
+									stat=set_vision_size statp=y;;
 							esac
 							true
 						} || {

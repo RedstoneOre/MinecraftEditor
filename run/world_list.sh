@@ -56,8 +56,8 @@
 						change_option_focus worlds "${sops[sopc]}"
 						read -r -N 1 op
 						case "$op" in
-							[aA]) ((sopc=sopc-1<0?2:sopc-1)) ;;
-							[dD]) ((sopc=sopc+1>=3?0:sopc+1)) ;;
+							[aA]) ((sopc=sopc-1<0?3:sopc-1)) ;;
+							[dD]) ((sopc=sopc+1>=4?0:sopc+1)) ;;
 							[qQ])
 								doquit=1
 								break;;

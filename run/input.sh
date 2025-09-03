@@ -15,7 +15,7 @@
 				readnewop=1
 				case "$inputop" in
 					disconnect)
-						echo 'Input Thrad Ended' >&2
+						echo 'Input Thread Ended' >&2
 						end=1
 						break
 						;;
